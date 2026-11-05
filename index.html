@@ -1,0 +1,1867 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- flow-rebuild template (Growth Audit, v3: + walkthrough video, phone view/QR, localization, paywall today vs proposed). Replace every double-brace placeholder, everything between
+     the SCREENS markers, and the CONTENT json. Rules that brand-check.py enforces are marked RULE.
+     Reference builds: eddieatadapty.github.io/datacamp-flow-rebuild-v2 · bterzic123.github.io/planner5d-flow-rebuild-v2 -->
+<title>Cookpad Growth Audit</title>
+<meta name="description" content="Five ideas to turn more Cookpad users into subscribers, each built into a clickable version of Cookpad's own app, from first launch to Premium. Prepared by Adapty.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- the APP's font (brand.json fonts, or the closest Google family) + a mono if the app shows code -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+/* BRAND:START — the only place the APP's colours are written as literals. RULE: every value here is
+   copied from brand.json / a sampled pixel of the app's own screens; never "improved". Used only inside the phone. */
+:root{
+  /* Cookpad: cookpad.com/us tokens (cp-app.css) + colours sampled off the US App Store screenshots */
+  --b-primary:#ff9933;            /* --cookpad-base-orange (light), App Store art, the + button */
+  --b-primary-ink:#ffffff;
+  --b-orange2:#f47e2e;            /* --cookpad-base-orange (dark): pressed / accent text */
+  --b-orange-lt:#fdf1e2;          /* --cookpad-background-accent-primary-light */
+  --b-gold:#e9b83f;               /* --cookpad-premium-gold: "Featured in the Top Cooksnapped Recipes" banner */
+  --b-gold-ink:#cb9a17;           /* --cookpad-text-premium-gold */
+  --b-gold-lt:#fff3d8;            /* --cookpad-premium-attention-background */
+  --b-bg:#f8f6f2;                 /* --cookpad-background-accent-secondary: app canvas */
+  --b-sheet:#f6f5f1;              /* bottom sheet (screenshot 3) */
+  --b-surface:#fbfbf9;            /* cards (screenshots 2, 4, 5) */
+  --b-field:#ecebe9;              /* --cookpad-border-secondary: search field fill */
+  --b-line:#e8e7e3;
+  --b-line2:#cececd;              /* --cookpad-border-primary */
+  --b-ink:#000000;                /* --cookpad-text-primary */
+  --b-ink2:#767676;               /* --cookpad-text-secondary */
+  --b-ink3:#939290;               /* --cookpad-text-tertiary */
+  --b-ink4:#4a4a4a;
+  --b-btn:#0f0f0f;                /* "Start importing recipe" button (screenshot 3) */
+  --b-accent2:#e9b83f;
+  --b-grad:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.62));
+  --b-radius:12px;
+  --b-pill:999px;
+  --b-font:'Noto Sans',-apple-system,system-ui,sans-serif;
+  --b-mono:ui-monospace,monospace;
+}
+/* BRAND:END */
+.sbar.lite{color:#fff}
+/* A second app family (e.g. a mono for code) is applied HERE, never in SCREENS css (brand-check allows only
+   var(--b-font) there). Prefix with .scr so it beats the screens' font shorthands, e.g.:
+   .scr .code,.scr .instr code{font-family:var(--b-mono)} */
+
+/* ================= the audit page — Adapty's, not the app's. Light, Apple-style. ================= */
+:root{
+  color-scheme:light;
+  --st-ground:#f5f5f7; --st-card:#ffffff; --st-ink:#1d1d1f; --st-ink2:#6e6e73; --st-ink3:#86868b;
+  --st-hair:rgba(0,0,0,.09); --st-link:#0066cc;
+  --st-accent:#290100;      /* dark brand colour of the APP: buttons, the outcome band */
+  --st-hi:#ff9933;          /* bright brand colour of the APP: outcome numbers on the band, idea dots */
+  --st-mark:rgba(255,153,51,.4); /* --st-hi at ~.5 alpha: the highlighter under impact numbers */
+  --st-font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+html,body{margin:0}
+body{background:var(--st-ground);color:var(--st-ink);font-family:var(--st-font);-webkit-font-smoothing:antialiased;font-size:17px;line-height:1.47}
+.au-wrap{max-width:1080px;margin:0 auto;padding-inline:22px}
+a{color:var(--st-link)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--st-link);outline-offset:3px;border-radius:6px}
+mark{background:linear-gradient(transparent 62%,var(--st-mark) 62%,var(--st-mark) 92%,transparent 92%);color:inherit;padding:0 .04em}
+
+/* nav */
+.au-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(245,245,247,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--st-hair)}
+.au-nav-in{max-width:1080px;margin:0 auto;padding-inline:22px;height:52px;display:flex;align-items:center;gap:26px}
+.au-brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.au-brand img{width:26px;height:26px;border-radius:7px;flex:none}
+.au-brand span{font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.au-brand small{font-size:15px;font-weight:400;color:var(--st-ink2)}
+.au-nav a{font-size:13px;color:var(--st-ink);text-decoration:none;opacity:.82}
+.au-nav a:hover{opacity:1}
+@media (max-width:560px){.au-nav a.au-opt{display:none}.au-brand small{display:none}}
+
+/* hero */
+.au-top-hero{text-align:center;padding-top:clamp(56px,9vw,96px);overflow:hidden;position:relative}
+.au-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--st-ink);margin:0 0 14px}
+.au-eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-display{font-size:clamp(60px,12vw,120px);line-height:.98;font-weight:700;letter-spacing:-.05em;margin:0}
+.au-lede{font-size:clamp(23px,3.4vw,34px);line-height:1.16;font-weight:600;letter-spacing:-.022em;max-width:760px;margin:22px auto 0;text-wrap:balance}
+.au-lede span{color:var(--st-ink2)}
+.au-byline{font-size:14px;color:var(--st-ink3);margin:18px 0 0}
+.au-ctas{display:flex;gap:26px;justify-content:center;align-items:center;margin-top:30px;flex-wrap:wrap}
+.au-btn{display:inline-block;background:var(--st-accent);color:#fff;border-radius:980px;padding:12px 23px;font-size:17px;font-weight:500;text-decoration:none;border:0;cursor:pointer}
+.au-btn:hover{filter:brightness(1.25)}
+.au-lnk{background:none;border:0;padding:0;color:var(--st-link);font-size:17px;text-decoration:none;cursor:pointer}
+.au-lnk::after{content:"\00a0›"}
+.au-lnk:hover{text-decoration:underline}
+.au-phones{display:flex;justify-content:center;align-items:flex-start;margin-top:clamp(40px,6vw,64px);height:clamp(300px,52vw,560px)}
+.au-hp{flex:none;border:0;padding:0;background:none;cursor:pointer;width:27%;max-width:290px;margin:0 -2.5%;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.au-hp img{display:block;width:100%;height:auto;filter:drop-shadow(0 28px 50px rgba(0,0,0,.2))}
+.au-hp.au-c{width:31%;max-width:330px;z-index:2}
+.au-hp.au-l{transform:translateY(12%) rotate(-5deg)}
+.au-hp.au-r{transform:translateY(12%) rotate(5deg)}
+.au-hp.au-l:hover{transform:translateY(9%) rotate(-5deg)}.au-hp.au-r:hover{transform:translateY(9%) rotate(5deg)}.au-hp.au-c:hover{transform:translateY(-3%)}
+
+/* sections */
+.au-sec{padding-block:clamp(72px,10vw,120px)}
+.au-sec.au-white{background:var(--st-card)}
+.au-kicker{font-size:15px;font-weight:600;color:var(--st-ink2);margin:0 0 12px}
+.au-h2{font-size:clamp(34px,5.2vw,56px);line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.au-h2 span{color:var(--st-ink3)}
+.au-split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,6vw,80px);align-items:end}
+.au-split p{margin:0;font-size:clamp(17px,1.7vw,21px);line-height:1.45;color:var(--st-ink2);letter-spacing:-.01em}
+.au-split p b{color:var(--st-ink);font-weight:600}
+.au-split p + p{margin-top:16px}
+.au-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(48px,7vw,80px);border-top:1px solid var(--st-hair)}
+.au-stat{padding:28px 20px 0 0}
+.au-stat b{display:block;font-size:clamp(40px,5.5vw,64px);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.au-stat span{display:block;font-size:15px;color:var(--st-ink2);margin-top:10px;max-width:22ch}
+.au-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,40px);margin-top:clamp(48px,7vw,72px)}
+.au-note h3{font-size:19px;font-weight:600;letter-spacing:-.015em;margin:0 0 8px}
+.au-note p{margin:0;font-size:15.5px;line-height:1.5;color:var(--st-ink2)}
+.au-note .au-ic{width:36px;height:36px;border-radius:10px;background:var(--st-ground);display:grid;place-items:center;margin-bottom:16px}
+.au-note .au-ic svg{width:19px;height:19px;stroke:var(--st-accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ideas */
+.au-ideas-h{margin-bottom:clamp(32px,5vw,48px)}
+.au-list{background:var(--st-card);border-radius:28px;padding-inline:clamp(20px,4vw,44px)}
+.au-idea{display:grid;grid-template-columns:56px 1fr 220px;gap:20px;align-items:start;padding-block:clamp(26px,3.5vw,36px);border-top:1px solid var(--st-hair)}
+.au-idea:first-child{border-top:0}
+.au-idea .au-num{font-size:15px;font-weight:600;color:var(--st-ink3);font-variant-numeric:tabular-nums;padding-top:6px}
+.au-idea h3{font-size:clamp(21px,2.4vw,26px);line-height:1.2;font-weight:600;letter-spacing:-.022em;margin:0 0 8px}
+.au-idea p{margin:0 0 12px;font-size:17px;line-height:1.5;color:var(--st-ink2);max-width:58ch}
+.au-idea p code{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--st-ink);background:var(--st-ground);padding:2px 7px;border-radius:6px}
+.au-idea .au-lnk{font-size:15px}
+.au-imp{text-align:right}
+.au-imp .au-v{font-size:clamp(30px,3.6vw,40px);font-weight:700;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;color:var(--st-accent)}
+.au-imp .au-l{font-size:13.5px;color:var(--st-ink2);margin-top:8px}
+.au-band{margin-top:20px;background:var(--st-accent);color:#fff;border-radius:28px;padding:clamp(32px,5vw,56px);display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
+.au-band .au-k{font-size:15px;font-weight:600;color:rgba(255,255,255,.62);margin:0 0 10px}
+.au-band h3{font-size:clamp(24px,3vw,32px);line-height:1.18;font-weight:600;letter-spacing:-.022em;margin:0;text-wrap:balance}
+.au-band .au-fn{font-size:13px;line-height:1.5;color:rgba(255,255,255,.55);margin:16px 0 0;max-width:52ch}
+.au-nums{display:flex;gap:clamp(28px,4vw,48px)}
+.au-nums small{display:block;font-size:13px;color:rgba(255,255,255,.62)}
+.au-nums b{display:block;font-size:clamp(48px,6.5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--st-hi);font-variant-numeric:tabular-nums;margin:4px 0 8px}
+.au-nums span{font-size:14px;color:rgba(255,255,255,.8)}
+.au-band .au-btn{background:var(--st-hi);color:var(--st-accent);font-weight:600;margin-top:26px}
+
+/* prototype */
+.au-proto-h{text-align:center;max-width:720px;margin:0 auto}
+.au-proto-h p{font-size:clamp(17px,1.7vw,21px);color:var(--st-ink2);margin:14px 0 0}
+.au-seg{display:flex;gap:4px;justify-content:center;margin:clamp(28px,4vw,40px) auto 0;padding:4px;background:var(--st-ground);border-radius:980px;width:max-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.au-seg::-webkit-scrollbar{display:none}
+.au-chip{flex:none;display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--st-ink2);font-size:13.5px;font-weight:500;padding:8px 14px;border-radius:980px;cursor:pointer;white-space:nowrap}
+.au-chip:hover{color:var(--st-ink)}
+.au-chip.on{background:var(--st-card);color:var(--st-ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.au-chip i{font-style:normal;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--st-hi);color:var(--st-accent)}
+.au-stage{display:grid;grid-template-columns:auto minmax(0,420px);gap:clamp(32px,6vw,72px);justify-content:center;align-items:center;margin-top:clamp(28px,4vw,44px)}
+.phone{width:390px;height:844px;border-radius:56px;padding:10px;background:#0b0d10;box-shadow:0 0 0 1.5px #3a3d42,0 40px 90px rgba(0,0,0,.25);max-width:calc(100vw - 44px)}
+.phone-in{position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;background:var(--b-bg)}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:9}
+.sbar{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:4px 32px 0;font:600 15px -apple-system,system-ui,sans-serif;color:var(--b-ink);z-index:8;pointer-events:none}
+.au-pn{background:var(--st-ground);border-radius:28px;padding:clamp(26px,3.5vw,38px)}
+.au-pn-k{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--st-ink)}
+.au-pn-k i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-pn-k.au-ctx{color:var(--st-ink2)}.au-pn-k.au-ctx i{background:var(--st-ink3);box-shadow:none}
+.au-pn-t{font-size:clamp(24px,2.6vw,30px);line-height:1.12;font-weight:700;letter-spacing:-.028em;margin:10px 0 14px;text-wrap:balance}
+.au-pn-h{margin:0;font-size:17px;line-height:1.55;color:var(--st-ink2)}
+.au-pn-h b{color:var(--st-ink);font-weight:600}
+.au-pn-o{margin-top:24px;padding-top:22px;border-top:1px solid var(--st-hair)}
+.au-pn-o .au-lab{font-size:13px;font-weight:600;color:var(--st-ink3)}
+.au-pn-o .au-val{font-size:clamp(38px,4.4vw,50px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:var(--st-accent);margin-top:6px;font-variant-numeric:tabular-nums}
+.au-pn-o .au-sub{font-size:14px;color:var(--st-ink2);margin-top:4px}
+.au-pn-a{margin:18px 0 0;font-size:14px;line-height:1.5;color:var(--st-ink2)}
+.au-pn-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:28px;padding-top:18px;border-top:1px solid var(--st-hair);font-size:13px;color:var(--st-ink3)}
+.au-pn-nav button{background:var(--st-card);border:0;border-radius:980px;padding:8px 15px;font-size:14px;font-weight:500;color:var(--st-ink);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.au-pn-nav button:disabled{opacity:.35;cursor:default}
+.au-hint{text-align:center;font-size:14px;color:var(--st-ink3);margin:22px 0 0}
+
+/* footer */
+.au-foot{padding-block:56px 72px;border-top:1px solid var(--st-hair)}
+.au-foot details{border-bottom:1px solid var(--st-hair);padding-bottom:18px}
+.au-foot summary{cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.au-foot summary::-webkit-details-marker{display:none}
+.au-foot summary::after{content:"+";font-size:24px;font-weight:300;color:var(--st-ink2)}
+.au-foot details[open] summary::after{content:"−"}
+.au-srcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 48px;margin-top:18px}
+.au-srcs h4{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--st-ink3);margin:18px 0 6px}
+.au-srcs dl{margin:0}.au-srcs dt{font-size:14.5px;font-weight:600;margin-top:10px}
+.au-srcs dd{margin:3px 0 0;font-size:14px;line-height:1.5;color:var(--st-ink2)}
+.au-fine{font-size:12.5px;line-height:1.6;color:var(--st-ink3);margin:22px 0 0;max-width:80ch}
+.au-cta-line{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:36px}
+.au-cta-line p{margin:0;font-size:clamp(19px,2.2vw,24px);font-weight:600;letter-spacing:-.02em;max-width:34ch}
+
+@media (max-width:900px){
+  .au-split,.au-band{grid-template-columns:1fr}
+  .au-notes{grid-template-columns:1fr}
+  .au-idea{grid-template-columns:40px 1fr}
+  .au-imp{grid-column:2;text-align:left;display:flex;align-items:baseline;gap:10px}
+  .au-imp .au-l{margin:0}
+  .au-imp .au-v{white-space:nowrap}
+  .au-stage{grid-template-columns:1fr;justify-items:center}
+  .au-pn{width:100%;max-width:520px}
+  .au-srcs{grid-template-columns:1fr}
+}
+@media (max-width:560px){.au-stats{grid-template-columns:1fr}.au-stat{padding:22px 0 0}.au-nums{flex-direction:column;gap:18px}}
+
+/* ================= extras (audit side): video, language, phone view + QR, paywall today vs proposed, ?tour ================= */
+[hidden]{display:none!important}
+/* the device never scrolls: off-screen slides would otherwise make it scrollable by focus / scrollIntoView */
+.phone-in,.scr{overflow:clip}
+/* hero: walkthrough link */
+.au-play::before{content:"▶";font-size:.72em;margin-right:7px;position:relative;top:-1px}
+/* video dialog */
+.au-vid{border:0;padding:0;background:transparent;max-width:min(1120px,94vw);width:100%;overflow:visible}
+.au-vid::backdrop{background:rgba(0,0,0,.74);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.au-vid-in{background:#000;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.au-vid video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.au-vid-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 4px 0;font-size:14px}
+.au-vid-bar a{color:#fff;opacity:.85}
+.au-vid-x{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:980px;padding:8px 16px;font-size:14px;cursor:pointer}
+/* language switch */
+.au-langrow{display:flex;justify-content:center;align-items:center;gap:12px;margin:18px 0 0;font-size:13.5px;color:var(--st-ink2);flex-wrap:wrap}
+.au-lsw{display:inline-flex;gap:2px;padding:3px;background:var(--st-ground);border-radius:980px}
+.au-lsw button{border:0;background:none;padding:6px 13px;border-radius:980px;font-size:13.5px;font-weight:500;color:var(--st-ink2);cursor:pointer;white-space:nowrap}
+.au-lsw button.on{background:var(--st-card);color:var(--st-ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+/* QR card (desktop) / full-screen button (phone) */
+.au-qr{display:flex;align-items:center;gap:18px;margin:26px auto 0;max-width:500px;background:var(--st-ground);border-radius:22px;padding:14px 22px 14px 14px}
+.au-qr img{width:112px;height:112px;border-radius:12px;image-rendering:pixelated;flex:none;background:#fff}
+.au-qr b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.au-qr p{margin:4px 0 0;font-size:14.5px;line-height:1.45;color:var(--st-ink2)}
+.au-mobw{display:none;text-align:center;margin-top:22px}
+@media (max-width:900px){.au-qr{display:none}.au-mobw{display:block}}
+/* paywall: today vs proposed */
+.au-cmp{display:grid;grid-template-columns:minmax(0,290px) minmax(0,1fr) minmax(0,290px);gap:clamp(24px,4vw,52px);align-items:center;margin-top:clamp(32px,5vw,52px)}
+.au-cmp figure{margin:0;text-align:center}
+.au-cmp figure img{display:block;width:100%;height:auto;filter:drop-shadow(0 24px 44px rgba(0,0,0,.18))}
+.au-cmp figcaption{margin-top:14px;font-size:15px;font-weight:600}
+.au-cmp figcaption span{color:var(--st-ink2);font-weight:400}
+.au-cmp-go{border:0;padding:0;background:none;cursor:pointer;display:block;width:100%;transition:transform .3s}
+.au-cmp-go:hover{transform:translateY(-4px)}
+.au-chg{list-style:none;margin:0;background:var(--st-card);border-radius:24px;padding:4px clamp(18px,2.4vw,28px)}
+.au-chg li{padding:15px 0;border-top:1px solid var(--st-hair)}
+.au-chg li:first-child{border-top:0}
+.au-chg h4{margin:0 0 7px;font-size:16px;font-weight:600;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.au-chg h4 i{font-style:normal;font-size:12px;font-weight:600;color:var(--st-accent);background:var(--st-mark);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.au-was,.au-now{display:grid;grid-template-columns:78px 1fr;gap:8px;font-size:14.5px;line-height:1.42}
+.au-was{color:var(--st-ink3)}
+.au-now{color:var(--st-ink);margin-top:3px}
+.au-was em,.au-now em{font-style:normal;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+.au-now em{color:var(--st-link)}
+.au-kept{margin:22px 0 0;font-size:14px;color:var(--st-ink2);text-align:center}
+@media (max-width:900px){.au-cmp{grid-template-columns:1fr 1fr;gap:18px}.au-chg{grid-column:1 / -1;order:3}.au-was,.au-now{grid-template-columns:70px 1fr}}
+
+/* ?app — the prototype full screen on a real phone, with a bar that opens the idea panel */
+html.appmode,html.appmode body{height:100%;overflow:hidden;background:#000}
+html.appmode .au-nav,html.appmode .au-top-hero,html.appmode #why,html.appmode #ideas,html.appmode #compare,html.appmode .au-foot,
+html.appmode .au-proto-h,html.appmode #prototype .au-langrow,html.appmode #chips,html.appmode .au-hint,html.appmode .au-qr,html.appmode .au-mobw{display:none!important}
+html.appmode #prototype{padding:0;background:#000}
+html.appmode #prototype .au-wrap{padding:0;max-width:none}
+html.appmode .au-stage{display:block;margin:0}
+html.appmode .phone{position:fixed;top:0;left:0;right:0;margin:0 auto;width:min(100%,480px);height:calc(100% - 56px - env(safe-area-inset-bottom,0px));max-width:none;border-radius:0;padding:0;box-shadow:none;background:#000}
+html.appmode .phone-in{border-radius:0}
+html.appmode .island,html.appmode .sbar{display:none}
+html.appmode .scr .s-pad{padding-top:max(58px,calc(env(safe-area-inset-top,0px) + 16px))}
+html.appmode .scr .s-x,html.appmode .scr .s-lang{top:max(54px,calc(env(safe-area-inset-top,0px) + 10px))}
+.au-appbar,.au-scrim{display:none}
+html.appmode .au-appbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 12px env(safe-area-inset-bottom,0px) 16px;align-items:center;gap:12px;background:#0b0b0c;border-top:1px solid rgba(255,255,255,.1);color:#fff}
+.au-ab-why{flex:1;min-width:0;display:flex;align-items:center;gap:9px;background:none;border:0;color:#fff;font-size:14px;font-weight:500;text-align:left;cursor:pointer;padding:0}
+.au-ab-why i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);flex:none}
+.au-ab-why span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.au-ab-why em{font-style:normal;color:rgba(255,255,255,.6);margin-left:auto;flex:none;font-size:13px}
+.au-appbar .au-lsw{background:rgba(255,255,255,.12)}
+.au-appbar .au-lsw button{color:rgba(255,255,255,.75);padding:5px 11px}
+.au-appbar .au-lsw button.on{background:#fff;color:#000}
+html.appmode #panel{position:fixed;left:0;right:0;bottom:0;z-index:80;max-width:none;width:auto;margin:0 auto;border-radius:24px 24px 0 0;max-height:78%;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.3,.7,.2,1);padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
+html.appmode.au-open #panel{transform:none}
+html.appmode.au-open .au-scrim{display:block;position:fixed;inset:0;z-index:75;background:rgba(0,0,0,.5)}
+
+/* ?tour — 1280×720 walkthrough frames (record-video.sh renders them into assets/walkthrough.mp4) */
+.au-tour{display:none}
+html.tourmode,html.tourmode body{overflow:hidden;background:var(--st-ground)}
+html.tourmode body *{visibility:hidden}
+html.tourmode .phone,html.tourmode .phone *,html.tourmode .au-tour,html.tourmode .au-tour *{visibility:visible}
+html.tourmode .phone{position:fixed;left:170px;top:44px;margin:0;transform:scale(.755);transform-origin:0 0;box-shadow:0 0 0 1.5px #3a3d42,0 34px 80px rgba(0,0,0,.22);z-index:5;max-width:none}
+html.tourmode .au-tour{display:block;position:fixed;inset:0;z-index:6;pointer-events:none;color:var(--st-ink)}
+.au-tb{position:absolute;left:590px;top:30px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600}
+.au-tb img{width:26px;height:26px;border-radius:7px}
+.au-tb small{font-size:16px;font-weight:400;color:var(--st-ink2)}
+.au-tby{position:absolute;right:48px;top:32px;font-size:14px;color:var(--st-ink3)}
+.au-tcap{position:absolute;left:590px;right:60px;top:50%;transform:translateY(-50%)}
+.au-tk{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600}
+.au-tk i{width:9px;height:9px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-tk.au-ctx{color:var(--st-ink2)}.au-tk.au-ctx i{background:var(--st-ink3);box-shadow:none}
+.au-tt{font-size:46px;line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:14px 0 14px;text-wrap:balance}
+.au-tl{font-size:23px;line-height:1.36;color:var(--st-ink2);letter-spacing:-.01em;margin:0;max-width:28ch}
+.au-to{margin-top:28px;padding-top:22px;border-top:1px solid var(--st-hair)}
+.au-to small{display:block;font-size:14px;font-weight:600;color:var(--st-ink3)}
+.au-to b{display:inline-block;font-size:62px;font-weight:700;letter-spacing:-.045em;line-height:1.08;color:var(--st-accent);margin-top:4px}
+.au-to span{display:block;font-size:16px;color:var(--st-ink2);margin-top:2px}
+.au-tprog{position:absolute;left:48px;right:48px;bottom:22px;height:4px;border-radius:3px;background:var(--st-hair);overflow:hidden}
+.au-tprog i{display:block;height:100%;background:var(--st-hi)}
+.au-ttap{position:absolute;left:0;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 2.5px rgba(255,255,255,.9),0 6px 16px rgba(0,0,0,.35);opacity:0}
+.au-tintro,.au-tend{position:absolute;inset:0;background:var(--st-ground);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0}
+.au-tintro .au-lede{margin-top:18px}
+.au-te-h{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-.035em;margin:0;max-width:18ch;text-wrap:balance}
+.au-te-n{display:flex;gap:64px;margin-top:30px}
+.au-te-n small{display:block;font-size:14px;color:var(--st-ink2)}
+.au-te-n b{display:block;font-size:76px;font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--st-accent);margin:4px 0 6px}
+.au-te-n span{font-size:15px;color:var(--st-ink2)}
+.au-te-q{display:flex;align-items:center;gap:18px;margin-top:34px;background:var(--st-card);border-radius:20px;padding:12px 24px 12px 12px;text-align:left}
+.au-te-q img{width:104px;height:104px;border-radius:10px;image-rendering:pixelated}
+.au-te-q b{display:block;font-size:18px;font-weight:600}
+.au-te-q span{display:block;font-size:15px;color:var(--st-link);margin-top:3px}
+.au-te-f{position:absolute;bottom:44px;left:0;right:0;font-size:13px;color:var(--st-ink3);margin:0}
+
+/* ---------- screen engine (layout only, no colours) ---------- */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--b-bg);color:var(--b-ink);font-family:var(--b-font);
+     transform:translateX(100%);transition:transform .32s cubic-bezier(.3,.7,.2,1);overflow:hidden;text-align:left;line-height:normal;font-size:16px}
+.scr.is-active{transform:none;z-index:2}.scr.is-past{transform:translateX(-28%)}.scr.under{transform:none;z-index:1}
+.scr.sheet{transform:translateY(100%)}.scr.sheet.is-active{transform:none}
+.nofx,.nofx *{transition:none!important}
+.shot .scr{transition:none!important}
+/* ?phone — just the device at (10,10), for shoot.sh and hero-stills.sh (&clear = transparent ground) */
+.phoneonly body{background:#141615}
+.phoneonly.clear body{background:transparent}
+.phoneonly body *{visibility:hidden}
+.phoneonly .phone,.phoneonly .phone *{visibility:visible}
+.phoneonly .phone{position:fixed;top:10px;left:10px;z-index:99;box-shadow:none;max-width:none;margin:0}
+
+/* SCREENS:START — styles for the app's screens. RULE: colours only via var(--b-*), or white/black
+   with alpha (scrims, shadows). RULE: no class name that the audit page above already uses
+   (.hero .btn .chip .list .idea .note .stat .band .num .hint .display .split …) — brand-check refuses collisions. */
+.scr svg{display:block}
+.scr button{font-family:var(--b-font);color:inherit;cursor:pointer}
+.c-pad{flex:1;display:flex;flex-direction:column;padding:58px 18px 22px;gap:12px;position:relative;min-height:0}
+.c-pad-s{padding-bottom:92px;gap:10px}
+.c-ic{width:34px;height:34px;display:grid;place-items:center;background:none;border:0;padding:0;color:var(--b-ink)}
+.c-ic svg{width:24px;height:24px;fill:none}
+.c-fi{display:inline-grid;place-items:center;flex:none}
+.c-fi svg{width:20px;height:20px;fill:none}
+.c-h1{font:700 27px/1.18 var(--b-font);margin:4px 0 0;letter-spacing:-.01em}
+.c-sub{font:400 15px/1.45 var(--b-font);color:var(--b-ink2);margin:0}
+.c-bbtn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;border:0;border-radius:8px;background:var(--b-btn);color:var(--b-primary-ink)!important;font:600 16px var(--b-font);padding:15px 16px}
+.c-bbtn .c-fi svg{width:19px;height:19px}
+.c-obtn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;border:1.5px solid var(--b-line2);border-radius:8px;background:var(--b-surface);font:600 16px var(--b-font);padding:13px 16px;color:var(--b-ink)}
+.c-later{background:none;border:0;font:500 14px var(--b-font);color:var(--b-ink2)!important;padding:6px;align-self:center}
+
+/* photo tile, their "Today's popular searches" / "Popular Ingredients" component */
+.c-tile{position:relative;margin:0;border-radius:8px;overflow:hidden;background:var(--b-line)}
+.c-tile img{width:100%;height:100%;object-fit:cover;display:block}
+.c-tile:after{content:"";position:absolute;inset:0;background:var(--b-grad)}
+.c-tile figcaption{position:absolute;left:10px;bottom:7px;z-index:1;color:#fff;font:600 15px var(--b-font);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+
+/* 1 welcome */
+.c-wel{background:var(--b-primary);color:#fff;padding:58px 20px 22px;gap:0}
+.c-wel-top{display:flex;align-items:center;justify-content:center}
+.c-wel-logo{height:40px;display:block}
+.c-wel-h{font:800 33px/1.1 var(--b-font);margin:22px 0 0;text-align:center;letter-spacing:-.015em}
+.c-wel-s{font:500 15px/1.42 var(--b-font);margin:10px 4px 0;text-align:center;color:rgba(255,255,255,.94)}
+.c-adfree{align-self:center;margin-top:14px;background:#fff;color:var(--b-primary);font:800 19px var(--b-font);padding:3px 12px;letter-spacing:-.01em}
+.c-wel-grid{margin-top:16px;display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:7px;flex:1;min-height:150px;max-height:244px}
+.c-wq{margin:14px 6px 0;text-align:center;color:#fff}
+.c-wqs{font-size:14px;letter-spacing:2px}
+.c-wq blockquote{margin:3px 0 0;font:600 15px/1.35 var(--b-font)}
+.c-wq figcaption{margin-top:3px;font:400 12px var(--b-font);opacity:.85}
+.c-wel-grid .c-t1{grid-row:span 2}
+.c-wel-grid .c-tile{box-shadow:0 6px 16px rgba(0,0,0,.16)}
+.c-wel-grid .c-tile figcaption{font-size:13.5px}
+.c-wel-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:16px}
+.c-wbtn{border:0;border-radius:8px;background:#fff;color:var(--b-ink)!important;font:700 17px var(--b-font);padding:16px}
+.c-wel-n{margin:2px 0 0;text-align:center;font:500 13px var(--b-font);color:rgba(255,255,255,.92)}
+.c-wel-log{background:none;border:0;color:#fff!important;font:600 14px var(--b-font);text-decoration:underline;text-underline-offset:3px;padding:4px}
+
+/* 2 who */
+.c-topbar{display:flex;align-items:center;gap:10px;margin-left:-6px}
+.c-steps{flex:1;display:flex;gap:5px}
+.c-steps i{flex:1;height:4px;border-radius:4px;background:var(--b-line)}
+.c-steps i.on{background:var(--b-primary)}
+.c-skip{font:600 14px var(--b-font);color:var(--b-ink2);cursor:pointer}
+.c-pick{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;margin-top:4px;flex:1;min-height:0;max-height:468px}
+.c-ptile{position:relative;height:auto;min-height:0;border:0;padding:0;border-radius:10px;overflow:hidden;background:var(--b-line);box-shadow:0 0 0 0 var(--b-primary);transition:box-shadow .15s}
+.c-ptile img{width:100%;height:100%;object-fit:cover;display:block}
+.c-ptile:after{content:"";position:absolute;inset:0;background:var(--b-grad)}
+.c-pl{position:absolute;left:11px;bottom:9px;right:10px;z-index:1;color:#fff;font:700 16px/1.2 var(--b-font);text-align:left;text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.c-chk{position:absolute;top:9px;right:9px;z-index:2;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.88);display:grid;place-items:center;color:transparent}
+.c-chk svg{width:16px;height:16px;fill:none}
+.c-ptile.on{box-shadow:0 0 0 3px var(--b-primary)}
+.c-ptile.on .c-chk{background:var(--b-primary);color:#fff}
+.c-whonote{display:flex;gap:9px;align-items:flex-start;margin:2px 0 0;font:400 13px/1.4 var(--b-font);color:var(--b-ink2);background:var(--b-surface);border:1px solid var(--b-line);border-radius:10px;padding:10px 12px}
+.c-whonote .c-fi svg{width:18px;height:18px}
+.c-who .c-bbtn{margin-top:auto;flex:none}
+.c-who .c-whonote,.c-who .c-h1,.c-who .c-sub,.c-who .c-topbar{flex:none}
+
+/* 3 search */
+.c-shead{display:flex;align-items:center;gap:10px;padding:2px 0}
+.c-shead b{font:600 24px var(--b-font);flex:1}
+.c-ava{width:36px;height:36px;border-radius:50%;background:var(--b-orange-lt);color:var(--b-orange2);display:grid;place-items:center;font:700 15px var(--b-font);font-style:normal;flex:none;overflow:hidden}
+.c-ava svg{width:22px;height:22px;fill:none}
+.c-ava-g{background:var(--b-field);color:var(--b-ink3)}
+.c-ava-s{width:20px;height:20px;font-size:10px}
+.c-bell{width:38px;height:38px;border-radius:50%;background:var(--b-field);display:grid;place-items:center}
+.c-bell svg{width:21px;height:21px;fill:none}
+.c-field{display:flex;align-items:center;gap:8px;width:100%;border:1.5px solid var(--b-line2);background:var(--b-surface);border-radius:999px;padding:10px 8px 10px 14px;font:400 16px var(--b-font);color:var(--b-ink);text-align:left}
+.c-field-on{border-color:var(--b-primary);box-shadow:0 0 0 3px var(--b-orange-lt)}
+.c-q{flex:1;display:flex;align-items:center;font:500 16px var(--b-font);white-space:nowrap;overflow:hidden}
+.c-caret{width:2px;height:20px;background:var(--b-primary);margin-left:1px;animation:cblink 1s steps(2) infinite}
+@keyframes cblink{50%{opacity:0}}
+.c-go{background:var(--b-btn);color:#fff;font:600 13px var(--b-font);padding:7px 13px;border-radius:999px;flex:none}
+.c-sugg{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+.c-sg-k{font:600 12px var(--b-font);color:var(--b-ink2);text-transform:uppercase;letter-spacing:.05em}
+.c-sg-row{display:flex;gap:7px;flex-wrap:wrap}
+.c-sg-row>span{font:500 13.5px var(--b-font);background:var(--b-field);border-radius:999px;padding:6px 12px}
+.c-sec{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+.c-sec b{font:600 19px var(--b-font)}
+.c-sec small{font:400 12.5px var(--b-font);color:var(--b-ink2)}
+.c-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:86px;gap:7px}
+.c-tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:var(--b-surface);border-top:1px solid var(--b-line);display:flex;justify-content:space-around;padding:9px 30px 0;z-index:4}
+.c-tabs>span{display:flex;flex-direction:column;align-items:center;gap:3px;font:500 11.5px var(--b-font);color:var(--b-ink3);width:120px}
+.c-tabs>span svg{width:26px;height:26px;fill:none}
+.c-tabs>span.on{color:var(--b-ink);font-weight:600}
+.c-fab{position:absolute;right:18px;bottom:94px;width:56px;height:56px;border-radius:50%;background:var(--b-primary);color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.18);z-index:5}
+.c-fab svg{width:30px;height:30px;fill:none}
+
+/* 4 results */
+.c-rhead{display:flex;align-items:center;gap:6px;margin-left:-6px}
+.c-field-sm{padding:8px 12px;flex:1}
+.c-filt{width:38px;height:38px;border-radius:50%;background:var(--b-field)}
+.c-filt svg{width:20px;height:20px}
+.c-sort{display:flex;gap:7px;align-items:center}
+.c-sort>span,.c-sortp{font:500 14px var(--b-font);border:1.5px solid var(--b-line2);border-radius:999px;padding:6px 13px;background:var(--b-surface);color:var(--b-ink)}
+.c-sort>span.on{background:var(--b-btn);border-color:var(--b-btn);color:#fff}
+.c-sortp{display:flex;align-items:center;gap:5px;border-color:var(--b-gold)!important;background:var(--b-gold-lt)!important;font-weight:600!important}
+.c-pi{display:inline-grid;place-items:center;color:var(--b-gold);flex:none}
+.c-pi svg{width:17px;height:17px}
+.scr .c-gold,.c-feat{display:flex;align-items:center;gap:12px;background:var(--b-gold);color:#fff;border:0;border-radius:10px;padding:11px 14px;text-align:left;width:100%}
+.c-gi svg{width:26px;height:26px;fill:none}
+.c-gt{flex:1;display:flex;flex-direction:column;gap:2px}
+.c-gt b{font:600 15px/1.25 var(--b-font)}
+.c-gt small{font:400 12.5px/1.3 var(--b-font);opacity:.95}
+.c-ga svg{width:22px;height:22px;fill:none}
+.c-rcount{margin:0;font:400 12.5px var(--b-font);color:var(--b-ink2)}
+.c-list{display:flex;flex-direction:column;gap:9px}
+.c-card{display:flex;gap:12px;align-items:stretch;background:var(--b-surface);border:1px solid var(--b-line);border-radius:12px;padding:8px;text-align:left;color:var(--b-ink)}
+.c-card>img{width:116px;height:116px;border-radius:8px;object-fit:cover;flex:none}
+.c-cb{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;padding:2px 2px 0 0}
+.c-cb b{font:600 15.5px/1.25 var(--b-font)}
+.c-cb small{font:400 12.5px/1.35 var(--b-font);color:var(--b-ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-au{margin-top:auto;display:flex;align-items:center;gap:6px;font:500 12.5px var(--b-font);color:var(--b-ink4)}
+.c-snap{margin-left:auto;display:flex;align-items:center;gap:3px;font:600 11px var(--b-font);font-style:normal;color:var(--b-gold-ink)}
+.c-snap svg{width:15px;height:15px;fill:none}
+
+/* 5 recipe */
+.c-rec{background:var(--b-surface)}
+.c-rimg{position:relative;height:276px;flex:none;background:var(--b-line)}
+.c-rimg>img{width:100%;height:100%;object-fit:cover;display:block}
+.c-rimg:before{content:"";position:absolute;inset:0 0 auto 0;height:120px;background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0));z-index:1}
+.c-rbar{position:absolute;top:52px;left:10px;right:14px;display:flex;justify-content:space-between;align-items:center;z-index:2;color:#fff}
+.c-icw{color:#fff}
+.c-icw2{display:flex;align-items:center;gap:14px}
+.c-icw2 svg{width:24px;height:24px;fill:none}
+.c-icw2 b{font:700 20px var(--b-font);letter-spacing:1px}
+.c-feat{border-radius:0;padding:12px 18px}
+.c-rbody{flex:1;padding:14px 18px 0;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden}
+.c-rtitle{display:flex;gap:10px;align-items:flex-start}
+.c-rtitle h2{flex:1;margin:0;font:700 24px/1.18 var(--b-font);letter-spacing:-.01em}
+.c-save{background:none;border:0;padding:2px;color:var(--b-ink)}
+.c-save svg{width:30px;height:30px;fill:none}
+.c-cook{display:flex;gap:10px;align-items:center}
+.c-cook b{display:block;font:500 15px var(--b-font)}
+.c-cook small{display:flex;align-items:center;gap:4px;font:400 13px var(--b-font);color:var(--b-ink2)}
+.c-pin svg{width:14px;height:14px;fill:none}
+.c-desc{margin:0;background:var(--b-field);border-radius:10px;padding:10px 12px;font:400 14px/1.45 var(--b-font)}
+.c-meta{display:flex;gap:10px}
+.c-meta>span{flex:1;border:1px solid var(--b-line);border-radius:10px;padding:8px 11px;display:flex;flex-direction:column;gap:3px}
+.c-meta small{font:400 12px var(--b-font);color:var(--b-ink2)}
+.c-meta b{font:600 15px var(--b-font)}
+.c-snaps{display:flex;align-items:center}
+.c-snaps img{width:24px;height:24px;border-radius:50%;object-fit:cover;border:2px solid var(--b-surface);margin-right:-7px}
+.c-snaps em{font-style:normal;margin-left:12px;font:600 13px var(--b-font);color:var(--b-gold-ink)}
+.c-ingh{margin:2px 0 0;font:600 19px var(--b-font)}
+.c-ing{list-style:none;margin:0;padding:0}
+.c-ing li{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--b-line);font:400 15px var(--b-font)}
+.c-ing li b{font-weight:700;min-width:58px}
+.c-rfoot{flex:none;padding:10px 18px 26px;background:var(--b-surface);box-shadow:0 -10px 14px var(--b-surface);position:relative;z-index:3}
+
+/* sheets (screenshot 3) */
+.c-scrim{background:rgba(0,0,0,.42);justify-content:flex-end}
+.c-sheet{background:var(--b-sheet);border-radius:24px 24px 0 0;padding:10px 22px 28px;display:flex;flex-direction:column;gap:10px;box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.c-grab{width:40px;height:5px;border-radius:5px;background:var(--b-line2);align-self:center;margin-bottom:6px}
+.c-scard{display:flex;gap:12px;align-items:center;background:var(--b-surface);border-radius:14px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.c-scard>img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex:none}
+.c-scard b{display:block;font:600 15px/1.25 var(--b-font)}
+.c-scard small{display:block;margin-top:3px;font:400 13px var(--b-font);color:var(--b-ink2)}
+.c-sh-t{margin:8px 0 0;text-align:center;font:600 20px/1.25 var(--b-font)}
+.c-sh-t2{margin-top:2px;font-size:22px}
+.c-sh-s{margin:0 0 4px;text-align:center;font:400 14.5px/1.45 var(--b-font);color:var(--b-ink2)}
+.c-sh-n{margin:2px 0 0;text-align:center;font:400 13px var(--b-font);color:var(--b-ink2)}
+.c-sh-q{margin:4px 0 0;text-align:center;font:600 17px var(--b-font)}
+.c-g{font:700 18px var(--b-font);color:var(--b-ink)}
+.c-srcs{display:flex;justify-content:space-between;gap:6px;margin:2px 0}
+.c-srcs>span{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;font:500 11.5px var(--b-font);color:var(--b-ink4);text-align:center}
+.c-sic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--b-btn);color:#fff}
+.c-sic svg{width:24px;height:24px}
+.c-web,.c-cam{background:var(--b-surface);color:var(--b-ink);border:1px solid var(--b-line)}
+.c-web svg,.c-cam svg{fill:none}
+.c-scard-i{margin-top:4px}
+.c-bbtn-c{width:auto;align-self:center;padding:14px 26px;margin-top:6px}
+.c-left{margin:0;text-align:center;font:400 13px var(--b-font);color:var(--b-ink2)}
+.c-unl{display:flex;gap:6px;align-items:center;justify-content:center;background:none;border:0;font:500 14px var(--b-font);color:var(--b-ink4)!important;padding:2px}
+
+/* 7 paywall */
+.c-pw{background:var(--b-surface)}
+.c-pwh{position:relative;height:226px;flex:none;background:var(--b-line)}
+.c-pwh>img{width:100%;height:100%;object-fit:cover;display:block}
+.c-pwh:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.38),rgba(0,0,0,0) 45%,rgba(251,251,249,0) 70%,var(--b-surface));z-index:1}
+.c-px{position:absolute;top:52px;right:14px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff!important;display:grid;place-items:center;z-index:3;padding:0}
+.c-px svg{width:18px;height:18px;fill:none}
+.c-rank{position:absolute;left:16px;top:56px;z-index:2;display:flex;align-items:center;gap:5px;background:var(--b-gold);color:#fff;font:600 12.5px var(--b-font);padding:5px 10px 5px 7px;border-radius:999px}
+.c-rank .c-pi{color:#fff}
+.c-pwb{padding:0 20px;display:flex;flex-direction:column;gap:10px;margin-top:-30px;position:relative;z-index:2}
+.c-ppill{align-self:flex-start;display:flex;align-items:center;gap:5px;background:var(--b-gold-lt);color:var(--b-gold-ink);font:700 12.5px var(--b-font);padding:5px 11px 5px 8px;border-radius:999px;border:1px solid var(--b-gold)}
+.c-pwt{margin:0;font:800 23px/1.17 var(--b-font);letter-spacing:-.015em;text-wrap:balance}
+.c-cmp{border:1px solid var(--b-line);border-radius:12px;overflow:hidden;background:var(--b-surface)}
+.c-cr{display:grid;grid-template-columns:1.15fr .9fr 1.1fr;align-items:center;padding:8px 12px;border-top:1px solid var(--b-line);font:400 13.5px var(--b-font)}
+.c-cr:first-child{border-top:0}
+.c-cr>span{font-weight:500}
+.c-cr small{font:400 13px var(--b-font);color:var(--b-ink2)}
+.c-cr .c-pc{color:var(--b-ink);font-weight:700;background:var(--b-gold-lt);margin:-8px -12px -8px 0;padding:8px 12px;align-self:stretch;display:flex;align-items:center}
+.c-ch{padding-top:7px;padding-bottom:7px}
+.c-ch b{font:700 12px var(--b-font);text-transform:uppercase;letter-spacing:.05em;color:var(--b-ink2)}
+.c-ch b.c-pc{color:var(--b-gold-ink)}
+.c-proof{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.c-stars{color:var(--b-gold);font-size:15px;letter-spacing:2px}
+.c-proof b{font:600 13.5px var(--b-font)}
+.c-proof q{font:400 13px/1.35 var(--b-font);color:var(--b-ink2);font-style:italic;quotes:none}
+.c-pwf{margin-top:auto;padding:10px 20px 24px;display:flex;flex-direction:column;gap:9px}
+.c-plan{display:flex;align-items:center;gap:11px;border:2px solid var(--b-gold);background:var(--b-gold-lt);border-radius:12px;padding:11px 14px}
+.c-pi-l svg{width:26px;height:26px}
+.c-plt{flex:1;display:flex;flex-direction:column;gap:1px}
+.c-plt b{font:700 15.5px var(--b-font)}
+.c-plt small{font:400 12.5px var(--b-font);color:var(--b-ink2)}
+.c-pr{font:800 20px var(--b-font);white-space:nowrap}
+.c-legal{display:flex;justify-content:center;gap:18px;margin:0;font:400 12px var(--b-font);color:var(--b-ink3)}
+
+/* 9 collection */
+.c-toast{display:flex;align-items:center;gap:8px;align-self:center;background:var(--b-btn);color:#fff;border-radius:999px;padding:8px 16px 8px 12px;font:500 14px var(--b-font)}
+.c-toast .c-fi svg{width:18px;height:18px}
+.c-fold{display:flex;gap:7px;overflow:hidden}
+.c-fold>span{flex:none;font:500 14px var(--b-font);border:1.5px solid var(--b-line2);border-radius:999px;padding:6px 13px;background:var(--b-surface)}
+.c-fold>span.on{background:var(--b-btn);color:#fff;border-color:var(--b-btn)}
+.c-cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.c-cg{display:flex;flex-direction:column;gap:4px}
+.c-cg>img{width:100%;height:168px;border-radius:10px;object-fit:cover}
+.c-cg b{font:600 14.5px/1.25 var(--b-font)}
+.c-cg small{font:400 12.5px/1.3 var(--b-font);color:var(--b-ink2)}
+.c-cg-e{border:1.5px dashed var(--b-line2);border-radius:12px;padding:12px;justify-content:center;align-items:flex-start;background:var(--b-surface)}
+.c-cge{width:44px;height:44px;border-radius:50%;background:var(--b-primary);color:#fff;display:grid;place-items:center;margin-bottom:6px}
+.c-cge svg{width:24px;height:24px;fill:none}
+.c-snapc{display:flex;gap:12px;align-items:center;background:var(--b-surface);border:1px solid var(--b-line);border-radius:12px;padding:10px 12px}
+.c-snapc .c-sic{width:42px;height:42px;flex:none;color:var(--b-primary)}
+.c-snapc b{display:block;font:600 14.5px var(--b-font)}
+.c-snapc small{display:block;font:400 12.5px/1.35 var(--b-font);color:var(--b-ink2)}
+.c-row3{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:84px;gap:7px}
+.c-row3 .c-tile figcaption{font-size:12.5px}
+.c-cg>img{height:150px!important}
+.c-plan-c{background:var(--b-orange-lt);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+.c-plan-c b{font:600 15px var(--b-font)}
+.c-plan-c small{font:400 13px/1.4 var(--b-font);color:var(--b-ink4)}
+/* SCREENS:END */
+</style>
+</head>
+<body>
+
+<nav class="au-nav" aria-label="Sections">
+  <div class="au-nav-in">
+    <div class="au-brand">
+      <img src="assets/brand/appstore-icon.jpg" alt="">
+      <span>Growth Audit <small>· Cookpad</small></span>
+    </div>
+    <a class="au-opt" href="#why">Why this</a>
+    <a href="#ideas">Five ideas</a>
+    <a href="#prototype">Prototype</a>
+    <a class="au-opt" href="#compare" id="navCompare" hidden>Paywall</a>
+  </div>
+</nav>
+
+<header class="au-top-hero" id="top">
+  <div class="au-wrap">
+    <p class="au-eyebrow"><i></i>Growth Audit · November 2026</p>
+    <h1 class="au-display">Cookpad</h1>
+    <p class="au-lede">Five ideas to turn more home cooks into Premium subscribers. <span>Each one built into a first run of your own app, from the first search to Premium, so you can tap through it.</span></p>
+    <p class="au-byline">Prepared by Adapty for the Cookpad team</p>
+    <div class="au-ctas">
+      <a class="au-btn" href="#ideas">See the five ideas</a>
+      <a class="au-lnk" href="#prototype">Open the prototype</a>
+      <button type="button" class="au-lnk au-play" id="heroVideo" hidden>Watch the 30-second walkthrough</button>
+    </div>
+  </div>
+  <!-- filled from CONTENT.hero: three screen ids → assets/hero/<id>.png (make them with hero-stills.sh) -->
+  <div class="au-phones" id="heroPhones" aria-label="Three screens from the prototype"></div>
+</header>
+
+<section class="au-sec au-white" id="why">
+  <div class="au-wrap">
+    <div class="au-split">
+      <div>
+        <p class="au-kicker">Why you’re seeing this</p>
+        <h2 class="au-h2">30,000 subscription apps taught us what moves conversion. <span>Here’s what we’d test first at Cookpad.</span></h2>
+      </div>
+      <div>
+        <p>Adapty runs subscriptions for <b>more than 30,000 apps</b>, so we see which onboarding and paywall changes lift revenue across the whole market, not just inside one app.</p>
+        <p>We pointed that at Cookpad. We took <b>your own screens, copy and prices</b> from your App Store listing and cookpad.com/us, and built the path from install to Premium around the five ideas with the most potential. We had no recording of your app, so every screen is a proposal in your design, not a copy of today’s flow.</p>
+      </div>
+    </div>
+    <div class="au-stats">
+      <div class="au-stat"><b>30,000+</b><span>apps run their subscriptions on Adapty</span></div>
+      <div class="au-stat"><b>5</b><span>ideas, each built as a working screen</span></div>
+      <div class="au-stat"><b>0</b><span>changes to your art direction</span></div>
+    </div>
+    <div class="au-notes">
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></div>
+        <h3>Five ideas, not fifteen</h3>
+        <p>We’re not proposing to rebuild every screen. These are the changes with the highest potential, ranked by what we’d test first.</p>
+      </div>
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></div>
+        <h3>Your design, not ours</h3>
+        <p>Every colour, control and price in the prototype is Cookpad’s. We changed the order and what gets shown.</p>
+      </div>
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13A1.5 1.5 0 0 1 5.5 4H15"/></svg></div>
+        <h3>We hope you haven’t tried these yet</h3>
+        <p>We work from the outside, so we can’t see your live flow or your test history. If you’ve already run one of these, tell us and we’ll go deeper on the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="au-sec" id="ideas">
+  <div class="au-wrap">
+    <div class="au-ideas-h">
+      <p class="au-kicker">The shortlist</p>
+      <h2 class="au-h2">Five ideas. <span>Ranked by what we’d test first.</span></h2>
+    </div>
+    <div class="au-list" id="ideaList"></div>
+    <div class="au-band">
+      <div>
+        <p class="au-k">Potential outcome, based on Adapty data</p>
+        <h3>Together they work on four moments: the first search, the first save, the paywall that follows, and what happens when someone says no.</h3>
+        <p class="au-fn" id="bandFn"></p>
+        <a class="au-btn" href="#prototype">Tap through the prototype</a>
+      </div>
+      <div class="au-nums" id="bandNums"></div>
+    </div>
+  </div>
+</section>
+
+<section class="au-sec au-white" id="prototype">
+  <div class="au-wrap">
+    <div class="au-proto-h">
+      <p class="au-kicker">The prototype</p>
+      <h2 class="au-h2">Every idea, inside your own app.</h2>
+      <p>Tap through it like a new user, or jump straight to an idea. Numbered chips mark the screens that carry one.</p>
+    </div>
+    <div class="au-langrow" id="langRow" hidden><span>Prototype language</span><div class="au-lsw" id="langSw" role="group" aria-label="Prototype language"></div></div>
+    <div class="au-seg" id="chips" role="tablist" aria-label="Screens"></div>
+    <div class="au-stage">
+      <div class="phone"><div class="phone-in">
+        <div class="island"></div>
+        <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+
+<!-- SCREENS:START — one section.scr[data-id=ID] per screen, in flow order. Only the screens an idea lands on,
+     plus the context needed to read the flow (~8–10). Wiring: data-go="<id>" · data-back · data-pick="key:value"
+     (+ data-advance="<id>") · data-toggle="key:value" · data-bind="key" / "label:key" / "count:key" ·
+     data-requires="key" · data-show="key:value" · data-input="key" · class="scr sheet" slides up (offer paywall).
+     RULE: images only from assets/ (their app, their site, App Store) — never stock, never hotlinked.
+     Extras: data-t="key" = translatable (markup is CONTENT.langs[0]; other languages in CONTENT.i18n) — keep data-t on
+     leaf-ish elements, never on an element that also carries data-bind/data-pick/data-show;
+     data-langtoggle cycles the language (their own language pill); data-aside keeps a screen out of the flow
+     (the paywall TODAY, rendered only for the side-by-side still). -->
+<!-- 1 · PROPOSAL: first launch in the art direction of their App Store screenshots (orange ground, white type, the "Ad-Free Browsing" box, photo tiles). No account asked. -->
+<section class="scr c-wel" data-id="welcome">
+  <div class="c-wel-top">
+    <img class="c-wel-logo" src="assets/brand/logo-3.png" alt="cookpad">
+  </div>
+  <h1 class="c-wel-h" data-t="wl_h">Not sure what to cook tonight?</h1>
+  <p class="c-wel-s" data-t="wl_s">Search by ingredient or by dish across thousands of recipes from home cooks, verified by the people who cooked them.</p>
+  <span class="c-adfree" data-t="wl_ad">Ad-Free Browsing</span>
+  <div class="c-wel-grid">
+    <figure class="c-tile c-t1"><img src="assets/crop/sticky-chicken.png" alt=""><figcaption data-t="wl_t1">Chicken</figcaption></figure>
+    <figure class="c-tile"><img src="assets/site/salmon.jpg" alt=""><figcaption data-t="wl_t2">Salmon</figcaption></figure>
+    <figure class="c-tile"><img src="assets/site/lasagna.jpg" alt=""><figcaption data-t="wl_t3">Lasagna</figcaption></figure>
+    <figure class="c-tile"><img src="assets/site/chili.jpg" alt=""><figcaption data-t="wl_t4">Chili</figcaption></figure>
+    <figure class="c-tile"><img src="assets/site/bananabread.jpg" alt=""><figcaption data-t="wl_t5">Banana Bread</figcaption></figure>
+  </div>
+  <figure class="c-wq"><span class="c-wqs">★★★★★</span><blockquote data-t="wl_q">“you can search an ingredient and it’ll find recipes using that ingredient.”</blockquote><figcaption data-t="wl_qa">US App Store review</figcaption></figure>
+  <div class="c-wel-foot">
+    <button class="c-wbtn" data-go="who"><span data-t="wl_cta">Find tonight’s dinner</span></button>
+    <p class="c-wel-n" data-t="wl_n">No account needed to look around.</p>
+    <button class="c-wel-log" data-go="who"><span data-t="wl_log">I already have an account</span></button>
+  </div>
+</section>
+
+<!-- 2 · PROPOSAL: one question, in their "Popular Ingredients" photo-tile component (idea 1) -->
+<section class="scr c-who" data-id="who">
+  <div class="c-pad">
+    <div class="c-topbar"><button class="c-ic" data-back aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/></svg></button><span class="c-steps"><i class="on"></i><i></i></span><span class="c-skip" data-go="search" data-t="wh_skip">Skip</span></div>
+    <h1 class="c-h1" data-t="wh_h">What do you cook most?</h1>
+    <p class="c-sub" data-t="wh_s">We’ll start your first search there. Recipes come first; no sign-up to see them.</p>
+    <div class="c-pick">
+      <button class="c-ptile" data-pick="goal:chicken" data-advance="search"><img src="assets/crop/sticky-chicken.png" alt=""><span class="c-pl" data-t="wh_o1">Chicken</span><i class="c-chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button>
+      <button class="c-ptile" data-pick="goal:soup" data-advance="search"><img src="assets/site/chili.jpg" alt=""><span class="c-pl" data-t="wh_o2">Soups &amp; chili</span><i class="c-chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button>
+      <button class="c-ptile" data-pick="goal:quick" data-advance="search"><img src="assets/site/cacio.jpg" alt=""><span class="c-pl" data-t="wh_o3">Quick &amp; easy</span><i class="c-chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button>
+      <button class="c-ptile" data-pick="goal:baking" data-advance="search"><img src="assets/crop/basque-cake.png" alt=""><span class="c-pl" data-t="wh_o4">Baking &amp; desserts</span><i class="c-chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button>
+    </div>
+    <p class="c-whonote"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10.644 3.717a1.626 1.626 0 0 1 2.712 0A15.3 15.3 0 0 1 16 12a15.3 15.3 0 0 1-2.644 8.283 1.626 1.626 0 0 1-2.712 0A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 2.644-8.283"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M20.283 10.644a1.626 1.626 0 0 1 0 2.712A15.3 15.3 0 0 1 12 16a15.3 15.3 0 0 1-8.283-2.644 1.626 1.626 0 0 1 0-2.712A15.3 15.3 0 0 1 12 8a15.3 15.3 0 0 1 8.283 2.644"/></svg></span><span data-t="wh_n">Recipes from home cooks in the US and around the world, translated automatically.</span></p>
+    <button class="c-bbtn" data-go="search"><span data-t="wh_cta">Show me recipes</span></button>
+  </div>
+</section>
+
+<!-- 3 · their Search screen (App Store screenshots 1 and 3): avatar, "Search", "Type ingredients…", popular tiles. The field is filled from the answer. -->
+<section class="scr c-srch" data-id="search">
+  <div class="c-pad c-pad-s">
+    <div class="c-shead"><span class="c-ava c-ava-g"><svg viewBox="0 0 24 24" aria-hidden="true"><circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="9" r="3.6"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4"/></svg></span><b data-t="sr_t">Search</b><span class="c-bell"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/></svg></span></div>
+    <button class="c-field c-field-on" data-go="results"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m15 15 5 5"/></svg></span>
+      <span class="c-q"><span data-show="goal:chicken"><span data-t="q_chicken">chicken</span></span><span data-show="goal:soup"><span data-t="q_soup">chili</span></span><span data-show="goal:quick"><span data-t="q_quick">pasta</span></span><span data-show="goal:baking"><span data-t="q_baking">cheesecake</span></span><i class="c-caret"></i></span>
+      <span class="c-go" data-t="sr_go">Search</span></button>
+    <div class="c-sugg">
+      <span class="c-sg-k" data-t="sr_from">From your answer</span>
+      <div class="c-sg-row" data-show="goal:chicken"><span data-t="sg_c1">chicken thighs</span><span data-t="sg_c2">chicken and rice</span><span data-t="sg_c3">gochujang</span></div>
+      <div class="c-sg-row" data-show="goal:soup"><span data-t="sg_s1">beans</span><span data-t="sg_s2">lentils</span><span data-t="sg_s3">chicken soup</span></div>
+      <div class="c-sg-row" data-show="goal:quick"><span data-t="sg_q1">garlic</span><span data-t="sg_q2">parmesan</span><span data-t="sg_q3">scallops</span></div>
+      <div class="c-sg-row" data-show="goal:baking"><span data-t="sg_b1">cream cheese</span><span data-t="sg_b2">banana</span><span data-t="sg_b3">air fryer</span></div>
+    </div>
+    <div class="c-sec"><b data-t="sr_pop">Today’s popular searches</b><small data-t="sr_upd">Updated 04:04</small></div>
+    <div class="c-grid">
+      <figure class="c-tile"><img src="assets/site/filet.jpg" alt=""><figcaption data-t="sr_g1">Filet Mignon</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/scallops.jpg" alt=""><figcaption data-t="sr_g2">Scallops</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/salmon.jpg" alt=""><figcaption data-t="sr_g3">Salmon</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/chickensoup.jpg" alt=""><figcaption data-t="sr_g4">Chicken Soup</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/lasagna.jpg" alt=""><figcaption data-t="sr_g5">Lasagna</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/pancakes.jpg" alt=""><figcaption data-t="sr_g6">Pancakes</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/asparagus.jpg" alt=""><figcaption data-t="sr_g7">Asparagus</figcaption></figure>
+      <figure class="c-tile"><img src="assets/site/quinoa.jpg" alt=""><figcaption data-t="sr_g8">Quinoa</figcaption></figure>
+    </div>
+  </div>
+  <nav class="c-tabs"><span class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m15 15 5 5"/></svg><span data-t="tb_s">Search</span></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10.4 21h3.2c2.24 0 3.36 0 4.216-.436a4 4 0 0 0 1.748-1.748C20 17.96 20 16.84 20 14.6V9.4c0-2.24 0-3.36-.436-4.216a4 4 0 0 0-1.748-1.748C16.96 3 15.84 3 13.6 3H10c-1.864 0-2.796 0-3.53.304A4 4 0 0 0 4.303 5.47C4 6.204 4 7.136 4 9v5.6c0 2.24 0 3.36.436 4.216a4 4 0 0 0 1.748 1.748C7.04 21 8.16 21 10.4 21"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 13V6H7v7l.81-.504c.613-.381.92-.572 1.248-.647.291-.066.593-.066.884 0 .328.075.635.266 1.249.647zM7 17h10"/></svg><span data-t="tb_c">Your Collection</span></span></nav>
+  <i class="c-fab"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12M6 12h12"/></svg></i>
+</section>
+
+<!-- 4 · PROPOSAL: their results, free and complete, with Premium's "most popular first" shown inside them in the gold of their Top Cooksnapped banner (idea 4) -->
+<section class="scr c-res" data-id="results">
+  <div class="c-pad c-pad-s">
+    <div class="c-rhead"><button class="c-ic" data-back aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/></svg></button>
+      <span class="c-field c-field-sm"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m15 15 5 5"/></svg></span><span class="c-q"><span data-show="goal:chicken"><span data-t="q_chicken2">chicken</span></span><span data-show="goal:soup"><span data-t="q_soup2">chili</span></span><span data-show="goal:quick"><span data-t="q_quick2">pasta</span></span><span data-show="goal:baking"><span data-t="q_baking2">cheesecake</span></span></span></span>
+      <span class="c-ic c-filt"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" cx="16" cy="7" r="2"/><circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" cx="10" cy="17" r="2"/></svg></span></div>
+    <div class="c-sort"><span class="on" data-t="rs_new">Newest</span><button class="c-sortp" data-go="paywall"><span class="c-pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.5 2H3.422a.4.4 0 0 0-.293.128A.4.4 0 0 0 3 2.42v19.162a.46.46 0 0 0 .047.21.3.3 0 0 0 .14.14.2.2 0 0 0 .118.057 1 1 0 0 0 .117.012h.082a.2.2 0 0 0 .082-.023l.914-.35zM6 2h12v19.022l-6-2.375-6 2.375zm7.852 4.307q.234.093.421.268.188.174.305.408.14.232.2.558.057.327.058.745 0 .606-.14 1.048a1.56 1.56 0 0 1-.423.699q-.28.255-.738.395t-1.09.14h-1.36V6.703q0-.164.06-.29a.5.5 0 0 1 .152-.199q.093-.069.328-.105.235-.034.61-.034.562 0 .96.058.399.058.657.174m2.332 3.085a2.1 2.1 0 0 1-.598.78 3.8 3.8 0 0 1-1.242.652 5 5 0 0 1-1.477.21h-1.781v3.376a.8.8 0 0 0 .035.244q.036.105.106.175a.86.86 0 0 0 .515.163h1.125v.489H8.11v-.49h.985a1 1 0 0 0 .258-.034.7.7 0 0 0 .187-.082.35.35 0 0 0 .094-.15.6.6 0 0 0 .023-.175V6.703a.9.9 0 0 0-.035-.256.25.25 0 0 0-.129-.163.7.7 0 0 0-.258-.105 2 2 0 0 0-.398-.035h-.727v-.512h4.875q.82 0 1.454.186.631.186 1.078.56.421.372.644.86.223.49.223 1.095 0 .606-.2 1.06M20.578 2q.165 0 .293.128A.4.4 0 0 1 21 2.42v19.162a.46.46 0 0 1-.047.21.3.3 0 0 1-.14.14.2.2 0 0 1-.118.057 1 1 0 0 1-.117.012h-.082a.2.2 0 0 1-.082-.023l-.914-.35V2z"/></svg></span><span data-t="rs_pop">Popular</span></button><span data-t="rs_cs">With Cooksnaps</span></div>
+    <button class="c-gold" data-go="paywall"><span class="c-gi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg></span><span class="c-gt"><b data-t="rs_gb">Top Cooksnapped recipes go first with Premium</b><small data-t="rs_gs">Cooksnapped by 5+ people · see the most popular first</small></span><span class="c-ga"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+    <p class="c-rcount" data-t="rs_n">Newest first · free to open, save and cook</p>
+    <div class="c-list" data-show="goal:chicken">
+      <button class="c-card" data-go="recipe"><img src="assets/crop/sticky-chicken.png" alt=""><span class="c-cb"><b data-t="rc_c1">Korean Style Sticky Chilli Chicken</b><small data-t="rc_c1i">chicken thighs, gochujang, honey, garlic, spring onion</small><span class="c-au"><i class="c-ava c-ava-s">A</i>Alex<em class="c-snap"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg><span data-t="rc_snap">Cooksnapped 5+</span></em></span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/chickensoup2.jpg" alt=""><span class="c-cb"><b data-t="rc_c2">Creamy chicken and pasta soup</b><small data-t="rc_c2i">chicken, pasta, spinach, sun-dried tomato, cream</small><span class="c-au"><i class="c-ava c-ava-s">S</i>Sam</span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/chicken.jpg" alt=""><span class="c-cb"><b data-t="rc_c3">Parmesan baked chicken</b><small data-t="rc_c3i">chicken breast, parmesan, mayo, garlic powder</small><span class="c-au"><i class="c-ava c-ava-s">J</i>Jo</span></span></button>
+    </div>
+    <div class="c-list" data-show="goal:soup">
+      <button class="c-card" data-go="recipe"><img src="assets/site/chili.jpg" alt=""><span class="c-cb"><b data-t="rc_s1">Three-bean beef chili</b><small data-t="rc_s1i">ground beef, kidney beans, black beans, tomato, cumin</small><span class="c-au"><i class="c-ava c-ava-s">A</i>Alex<em class="c-snap"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg><span data-t="rc_snap2">Cooksnapped 5+</span></em></span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/chickensoup.jpg" alt=""><span class="c-cb"><b data-t="rc_s2">Loaded chicken soup</b><small data-t="rc_s2i">chicken, potato, cheddar, spring onion, hot sauce</small><span class="c-au"><i class="c-ava c-ava-s">S</i>Sam</span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/lentils.jpg" alt=""><span class="c-cb"><b data-t="rc_s3">Simple lentil soup</b><small data-t="rc_s3i">lentils, carrot, onion, garlic, stock</small><span class="c-au"><i class="c-ava c-ava-s">J</i>Jo</span></span></button>
+    </div>
+    <div class="c-list" data-show="goal:quick">
+      <button class="c-card" data-go="recipe"><img src="assets/site/cacio.jpg" alt=""><span class="c-cb"><b data-t="rc_q1">Cacio e pepe, no clumps</b><small data-t="rc_q1i">spaghetti, pecorino, black pepper, pasta water</small><span class="c-au"><i class="c-ava c-ava-s">A</i>Alex<em class="c-snap"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg><span data-t="rc_snap3">Cooksnapped 5+</span></em></span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/scallops.jpg" alt=""><span class="c-cb"><b data-t="rc_q2">10-minute garlic butter scallops</b><small data-t="rc_q2i">scallops, butter, garlic, lemon, asparagus</small><span class="c-au"><i class="c-ava c-ava-s">S</i>Sam</span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/lasagna.jpg" alt=""><span class="c-cb"><b data-t="rc_q3">Weeknight skillet lasagna</b><small data-t="rc_q3i">lasagna noodles, ground beef, ricotta, marinara</small><span class="c-au"><i class="c-ava c-ava-s">J</i>Jo</span></span></button>
+    </div>
+    <div class="c-list" data-show="goal:baking">
+      <button class="c-card" data-go="recipe"><img src="assets/crop/basque-cake.png" alt=""><span class="c-cb"><b data-t="rc_b1">Easy Basque Burnt Cake</b><small data-t="rc_b1i">cream cheese, sugar, eggs, cream, flour</small><span class="c-au"><i class="c-ava c-ava-s">A</i>Alex<em class="c-snap"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg><span data-t="rc_snap4">Cooksnapped 5+</span></em></span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/cheesecake.jpg" alt=""><span class="c-cb"><b data-t="rc_b2">New York cheesecake</b><small data-t="rc_b2i">cream cheese, graham crackers, sour cream, vanilla</small><span class="c-au"><i class="c-ava c-ava-s">S</i>Sam</span></span></button>
+      <button class="c-card" data-go="recipe"><img src="assets/site/bananabread.jpg" alt=""><span class="c-cb"><b data-t="rc_b3">Chocolate chip banana bread</b><small data-t="rc_b3i">ripe bananas, flour, brown sugar, chocolate chips</small><span class="c-au"><i class="c-ava c-ava-s">J</i>Jo</span></span></button>
+    </div>
+  </div>
+  <nav class="c-tabs"><span class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m15 15 5 5"/></svg><span data-t="tb_s2">Search</span></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10.4 21h3.2c2.24 0 3.36 0 4.216-.436a4 4 0 0 0 1.748-1.748C20 17.96 20 16.84 20 14.6V9.4c0-2.24 0-3.36-.436-4.216a4 4 0 0 0-1.748-1.748C16.96 3 15.84 3 13.6 3H10c-1.864 0-2.796 0-3.53.304A4 4 0 0 0 4.303 5.47C4 6.204 4 7.136 4 9v5.6c0 2.24 0 3.36.436 4.216a4 4 0 0 0 1.748 1.748C7.04 21 8.16 21 10.4 21"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 13V6H7v7l.81-.504c.613-.381.92-.572 1.248-.647.291-.066.593-.066.884 0 .328.075.635.266 1.249.647zM7 17h10"/></svg><span data-t="tb_c2">Your Collection</span></span></nav>
+</section>
+
+<!-- 5 · their recipe screen (App Store screenshot 2): photo, gold "Featured in the Top Cooksnapped Recipes" banner, title, cook, ingredients. Free to read. -->
+<section class="scr c-rec" data-id="recipe">
+  <div class="c-rimg">
+    <img data-show="goal:chicken" src="assets/crop/sticky-chicken.png" alt="">
+    <img data-show="goal:soup" src="assets/site/chili.jpg" alt="">
+    <img data-show="goal:quick" src="assets/site/cacio.jpg" alt="">
+    <img data-show="goal:baking" src="assets/crop/basque-cake.png" alt="">
+    <div class="c-rbar"><button class="c-ic c-icw" data-back aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/></svg></button><span class="c-icw2"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4-6 4V4.5a1 1 0 0 1 1-1z"/></svg><b>···</b></span></div>
+  </div>
+  <div class="c-feat"><span class="c-gi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg></span><span class="c-gt"><b data-t="rp_f">Featured in the Top Cooksnapped Recipes</b><small data-t="rp_fs">Cooksnapped by 5+ people</small></span><span class="c-ga"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+  <div class="c-rbody">
+    <div class="c-rtitle">
+      <h2><span data-show="goal:chicken"><span data-t="rc_c1b">Korean Style Sticky Chilli Chicken</span></span><span data-show="goal:soup"><span data-t="rc_s1b">Three-bean beef chili</span></span><span data-show="goal:quick"><span data-t="rc_q1b">Cacio e pepe, no clumps</span></span><span data-show="goal:baking"><span data-t="rc_b1b">Easy Basque Burnt Cake</span></span></h2>
+      <button class="c-save" data-go="signup" aria-label="Save"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4-6 4V4.5a1 1 0 0 1 1-1z"/></svg></button>
+    </div>
+    <div class="c-cook"><i class="c-ava">A</i><span><b>Alex</b><small><span class="c-pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="10" r="2.3"/></svg></span><span data-t="rp_loc">Home cook, US</span></small></span></div>
+    <p class="c-desc"><span data-show="goal:chicken"><span data-t="rp_dc">Succulent spicy bites of glazed chicken. Perfect served on rice.</span></span><span data-show="goal:soup"><span data-t="rp_ds">A pot that feeds everyone, better the next day.</span></span><span data-show="goal:quick"><span data-t="rp_dq">Three ingredients and the pasta water. Done in 15 minutes.</span></span><span data-show="goal:baking"><span data-t="rp_db">This Air Fryer Basque Burnt Cake is smooth and creamy. It is also ridiculously easy!</span></span></p>
+    <div class="c-meta"><span><small data-t="rp_ck">Cook time</small><b><span data-show="goal:chicken"><span data-t="rp_ck1">30 mins</span></span><span data-show="goal:soup"><span data-t="rp_ck2">1 hour</span></span><span data-show="goal:quick"><span data-t="rp_ck3">15 mins</span></span><span data-show="goal:baking"><span data-t="rp_ck4">50 mins</span></span></b></span><span><small data-t="rp_sv">Cooksnaps</small><b class="c-snaps"><img src="assets/site/chickensoup2.jpg" alt=""><img src="assets/site/chicken.jpg" alt=""><img src="assets/site/quick.jpg" alt=""><em>5+</em></b></span></div>
+    <h3 class="c-ingh" data-t="rp_ing">Ingredients</h3>
+    <ul class="c-ing">
+      <li data-show="goal:chicken"><b>600 g</b><span data-t="ig_c1">chicken thighs</span></li><li data-show="goal:chicken"><b>2 tbsp</b><span data-t="ig_c2">gochujang</span></li><li data-show="goal:chicken"><b>2 tbsp</b><span data-t="ig_c3">honey</span></li>
+      <li data-show="goal:soup"><b>500 g</b><span data-t="ig_s1">ground beef</span></li><li data-show="goal:soup"><b>3 cans</b><span data-t="ig_s2">beans</span></li><li data-show="goal:soup"><b>1 tbsp</b><span data-t="ig_s3">cumin</span></li>
+      <li data-show="goal:quick"><b>200 g</b><span data-t="ig_q1">spaghetti</span></li><li data-show="goal:quick"><b>80 g</b><span data-t="ig_q2">pecorino</span></li><li data-show="goal:quick"><b>1 tsp</b><span data-t="ig_q3">black pepper</span></li>
+      <li data-show="goal:baking"><b>600 g</b><span data-t="ig_b1">Cream cheese</span></li><li data-show="goal:baking"><b>300 g</b><span data-t="ig_b2">Granulated sugar</span></li><li data-show="goal:baking"><b>4</b><span data-t="ig_b3">eggs</span></li>
+    </ul>
+  </div>
+  <div class="c-rfoot"><button class="c-bbtn c-bbtn-i" data-go="signup"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4-6 4V4.5a1 1 0 0 1 1-1z"/></svg></span><span data-t="rp_save">Save to Your Collection</span></button></div>
+</section>
+
+<!-- 6 · PROPOSAL: sign-up only at the first save, in their bottom-sheet design (App Store screenshot 3) (idea 3) -->
+<section class="scr sheet c-scrim" data-id="signup">
+  <div class="c-sheet">
+    <i class="c-grab"></i>
+    <div class="c-scard">
+      <img data-show="goal:chicken" src="assets/crop/sticky-chicken.png" alt=""><img data-show="goal:soup" src="assets/site/chili.jpg" alt=""><img data-show="goal:quick" src="assets/site/cacio.jpg" alt=""><img data-show="goal:baking" src="assets/crop/basque-cake.png" alt="">
+      <span><b><span data-show="goal:chicken"><span data-t="rc_c1c">Korean Style Sticky Chilli Chicken</span></span><span data-show="goal:soup"><span data-t="rc_s1c">Three-bean beef chili</span></span><span data-show="goal:quick"><span data-t="rc_q1c">Cacio e pepe, no clumps</span></span><span data-show="goal:baking"><span data-t="rc_b1c">Easy Basque Burnt Cake</span></span></b><small data-t="su_by">Alex · Cooksnapped by 5+ people</small></span>
+    </div>
+    <h2 class="c-sh-t" data-t="su_t">Save it to Your Collection?</h2>
+    <p class="c-sh-s" data-t="su_s">A free account keeps every recipe you save, on your phone and on the web.</p>
+    <button class="c-bbtn" data-go="paywall"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.2.8 1.1 1.7 2.3 2.9 2.3 1.1-.1 1.6-.8 3-.8s1.8.8 3 .7c1.2 0 2-1.1 2.8-2.2.9-1.3 1.2-2.5 1.2-2.6 0 0-2.4-.9-2.4-3.5zM14.1 5.5c.6-.8 1.1-1.8 1-2.9-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2.1-.5 2.7-1.3z"/></svg></span><span data-t="su_a">Continue with Apple</span></button>
+    <button class="c-obtn" data-go="paywall"><span class="c-g">G</span><span data-t="su_g">Continue with Google</span></button>
+    <button class="c-obtn" data-go="paywall"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" x="3.5" y="5.5" width="17" height="13" rx="2"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6"/></svg></span><span data-t="su_e">Continue with email</span></button>
+    <p class="c-sh-n"><span data-t="su_n">Your saved recipes stay private until you choose to share them.</span></p>
+    <button class="c-later" data-back><span data-t="su_l">Not now, keep browsing</span></button>
+  </div>
+</section>
+
+<!-- 7 · PROPOSAL: the Premium paywall, about their search: their gold, the three Premium lines from the listing as free vs Premium, rating by the button (idea 2) -->
+<section class="scr c-pw" data-id="paywall">
+  <div class="c-pwh">
+    <img data-show="goal:chicken" src="assets/crop/sticky-chicken.png" alt=""><img data-show="goal:soup" src="assets/site/chili.jpg" alt=""><img data-show="goal:quick" src="assets/site/cacio.jpg" alt=""><img data-show="goal:baking" src="assets/crop/basque-cake.png" alt="">
+    <button class="c-px" data-go="close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <span class="c-rank"><span class="c-pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.5 2H3.422a.4.4 0 0 0-.293.128A.4.4 0 0 0 3 2.42v19.162a.46.46 0 0 0 .047.21.3.3 0 0 0 .14.14.2.2 0 0 0 .118.057 1 1 0 0 0 .117.012h.082a.2.2 0 0 0 .082-.023l.914-.35zM6 2h12v19.022l-6-2.375-6 2.375zm7.852 4.307q.234.093.421.268.188.174.305.408.14.232.2.558.057.327.058.745 0 .606-.14 1.048a1.56 1.56 0 0 1-.423.699q-.28.255-.738.395t-1.09.14h-1.36V6.703q0-.164.06-.29a.5.5 0 0 1 .152-.199q.093-.069.328-.105.235-.034.61-.034.562 0 .96.058.399.058.657.174m2.332 3.085a2.1 2.1 0 0 1-.598.78 3.8 3.8 0 0 1-1.242.652 5 5 0 0 1-1.477.21h-1.781v3.376a.8.8 0 0 0 .035.244q.036.105.106.175a.86.86 0 0 0 .515.163h1.125v.489H8.11v-.49h.985a1 1 0 0 0 .258-.034.7.7 0 0 0 .187-.082.35.35 0 0 0 .094-.15.6.6 0 0 0 .023-.175V6.703a.9.9 0 0 0-.035-.256.25.25 0 0 0-.129-.163.7.7 0 0 0-.258-.105 2 2 0 0 0-.398-.035h-.727v-.512h4.875q.82 0 1.454.186.631.186 1.078.56.421.372.644.86.223.49.223 1.095 0 .606-.2 1.06M20.578 2q.165 0 .293.128A.4.4 0 0 1 21 2.42v19.162a.46.46 0 0 1-.047.21.3.3 0 0 1-.14.14.2.2 0 0 1-.118.057 1 1 0 0 1-.117.012h-.082a.2.2 0 0 1-.082-.023l-.914-.35V2z"/></svg></span><span data-t="pw_rank">Top Cooksnapped</span></span>
+  </div>
+  <div class="c-pwb">
+    <span class="c-ppill"><span class="c-pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.5 2H3.422a.4.4 0 0 0-.293.128A.4.4 0 0 0 3 2.42v19.162a.46.46 0 0 0 .047.21.3.3 0 0 0 .14.14.2.2 0 0 0 .118.057 1 1 0 0 0 .117.012h.082a.2.2 0 0 0 .082-.023l.914-.35zM6 2h12v19.022l-6-2.375-6 2.375zm7.852 4.307q.234.093.421.268.188.174.305.408.14.232.2.558.057.327.058.745 0 .606-.14 1.048a1.56 1.56 0 0 1-.423.699q-.28.255-.738.395t-1.09.14h-1.36V6.703q0-.164.06-.29a.5.5 0 0 1 .152-.199q.093-.069.328-.105.235-.034.61-.034.562 0 .96.058.399.058.657.174m2.332 3.085a2.1 2.1 0 0 1-.598.78 3.8 3.8 0 0 1-1.242.652 5 5 0 0 1-1.477.21h-1.781v3.376a.8.8 0 0 0 .035.244q.036.105.106.175a.86.86 0 0 0 .515.163h1.125v.489H8.11v-.49h.985a1 1 0 0 0 .258-.034.7.7 0 0 0 .187-.082.35.35 0 0 0 .094-.15.6.6 0 0 0 .023-.175V6.703a.9.9 0 0 0-.035-.256.25.25 0 0 0-.129-.163.7.7 0 0 0-.258-.105 2 2 0 0 0-.398-.035h-.727v-.512h4.875q.82 0 1.454.186.631.186 1.078.56.421.372.644.86.223.49.223 1.095 0 .606-.2 1.06M20.578 2q.165 0 .293.128A.4.4 0 0 1 21 2.42v19.162a.46.46 0 0 1-.047.21.3.3 0 0 1-.14.14.2.2 0 0 1-.118.057 1 1 0 0 1-.117.012h-.082a.2.2 0 0 1-.082-.023l-.914-.35V2z"/></svg></span><span data-t="pw_pill">Cookpad Premium</span></span>
+    <h1 class="c-pwt"><span data-show="goal:chicken"><span data-t="pw_hc">The most popular chicken recipes, first in every search</span></span><span data-show="goal:soup"><span data-t="pw_hs">The most popular soups and chili, first in every search</span></span><span data-show="goal:quick"><span data-t="pw_hq">The most popular quick recipes, first in every search</span></span><span data-show="goal:baking"><span data-t="pw_hb">The most popular baking recipes, first in every search</span></span></h1>
+    <div class="c-cmp">
+      <div class="c-cr c-ch"><span></span><b data-t="pw_free">Free</b><b class="c-pc" data-t="pw_prem">Premium</b></div>
+      <div class="c-cr"><span data-t="pw_r1">Search results</span><small data-t="pw_r1f">Newest first</small><small class="c-pc" data-t="pw_r1p">Most popular first</small></div>
+      <div class="c-cr"><span data-t="pw_r2">Recipe imports</span><small data-t="pw_r2f">5 a week</small><small class="c-pc" data-t="pw_r2p">Unlimited</small></div>
+      <div class="c-cr"><span data-t="pw_r3">Filters</span><small data-t="pw_r3f">Basic</small><small class="c-pc" data-t="pw_r3p">Advanced</small></div>
+    </div>
+    <div class="c-proof"><span class="c-stars">★★★★★</span><b data-t="pw_rt">4.4 · 7,335 ratings on the App Store</b><q data-t="pw_q">“There’s almost no recipe you CAN’T find on Cookpad.”</q></div>
+  </div>
+  <div class="c-pwf">
+    <div class="c-plan on"><span class="c-pi c-pi-l"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.5 2H3.422a.4.4 0 0 0-.293.128A.4.4 0 0 0 3 2.42v19.162a.46.46 0 0 0 .047.21.3.3 0 0 0 .14.14.2.2 0 0 0 .118.057 1 1 0 0 0 .117.012h.082a.2.2 0 0 0 .082-.023l.914-.35zM6 2h12v19.022l-6-2.375-6 2.375zm7.852 4.307q.234.093.421.268.188.174.305.408.14.232.2.558.057.327.058.745 0 .606-.14 1.048a1.56 1.56 0 0 1-.423.699q-.28.255-.738.395t-1.09.14h-1.36V6.703q0-.164.06-.29a.5.5 0 0 1 .152-.199q.093-.069.328-.105.235-.034.61-.034.562 0 .96.058.399.058.657.174m2.332 3.085a2.1 2.1 0 0 1-.598.78 3.8 3.8 0 0 1-1.242.652 5 5 0 0 1-1.477.21h-1.781v3.376a.8.8 0 0 0 .035.244q.036.105.106.175a.86.86 0 0 0 .515.163h1.125v.489H8.11v-.49h.985a1 1 0 0 0 .258-.034.7.7 0 0 0 .187-.082.35.35 0 0 0 .094-.15.6.6 0 0 0 .023-.175V6.703a.9.9 0 0 0-.035-.256.25.25 0 0 0-.129-.163.7.7 0 0 0-.258-.105 2 2 0 0 0-.398-.035h-.727v-.512h4.875q.82 0 1.454.186.631.186 1.078.56.421.372.644.86.223.49.223 1.095 0 .606-.2 1.06M20.578 2q.165 0 .293.128A.4.4 0 0 1 21 2.42v19.162a.46.46 0 0 1-.047.21.3.3 0 0 1-.14.14.2.2 0 0 1-.118.057 1 1 0 0 1-.117.012h-.082a.2.2 0 0 1-.082-.023l-.914-.35V2z"/></svg></span><span class="c-plt"><b data-t="pw_pn">Premium Service</b><small data-t="pw_pns">Everything above, on every search</small></span><b class="c-pr" data-t="pw_pr">$4.99</b></div>
+    <button class="c-bbtn"><span data-t="pw_cta">Subscribe to Premium</span></button>
+    <p class="c-legal"><span data-t="pw_rs">Restore</span><span data-t="pw_tm">Terms</span><span data-t="pw_pv">Privacy</span></p>
+  </div>
+</section>
+
+<!-- 8 · PROPOSAL: on close, no second plan to push: their own import sheet (App Store screenshot 3), the next place Premium helps (idea 5) -->
+<section class="scr sheet c-scrim" data-id="close">
+  <div class="c-sheet">
+    <i class="c-grab"></i>
+    <h2 class="c-sh-t c-sh-t2" data-t="cl_t">Keep cooking, free</h2>
+    <p class="c-sh-s" data-t="cl_s">Your recipe is saved. Bring in the ones you’ve found elsewhere too, ingredients and steps separated, ready to follow.</p>
+    <div class="c-srcs"><span><i class="c-sic c-ig"><svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M5.998.4A5.607 5.607 0 0 0 .4 6v8A5.607 5.607 0 0 0 6.002 19.6h8a5.607 5.607 0 0 0 5.598-5.602v-8A5.607 5.607 0 0 0 13.998.4zM15.6 3.6a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6M10 5.2c2.647 0 4.8 2.153 4.8 4.8s-2.153 4.8-4.8 4.8A4.805 4.805 0 0 1 5.2 10c0-2.647 2.153-4.8 4.8-4.8m0 1.6a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4"/></svg></i><small>Instagram</small></span><span><i class="c-sic c-tt"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3h3a4.5 4.5 0 0 0 4 4v3a7.4 7.4 0 0 1-4-1.2V15a6 6 0 1 1-6-6v3.2a2.8 2.8 0 1 0 3 2.8z"/></svg></i><small>TikTok</small></span><span><i class="c-sic c-web"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10.644 3.717a1.626 1.626 0 0 1 2.712 0A15.3 15.3 0 0 1 16 12a15.3 15.3 0 0 1-2.644 8.283 1.626 1.626 0 0 1-2.712 0A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 2.644-8.283"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M20.283 10.644a1.626 1.626 0 0 1 0 2.712A15.3 15.3 0 0 1 12 16a15.3 15.3 0 0 1-8.283-2.644 1.626 1.626 0 0 1 0-2.712A15.3 15.3 0 0 1 12 8a15.3 15.3 0 0 1 8.283 2.644"/></svg></i><small data-t="cl_web">Any website</small></span><span><i class="c-sic c-cam"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" cx="12" cy="13" r="3.4"/></svg></i><small data-t="cl_cam">A cookbook page</small></span></div>
+    <div class="c-scard c-scard-i"><img src="assets/crop/import-thumb.png" alt=""><span><b data-t="cl_ex">Chicken Velouté Stew</b><small>Instagram</small></span></div>
+    <p class="c-sh-q" data-t="cl_q">Import this recipe?</p>
+    <p class="c-sh-n" data-t="cl_v">Saved as a recipe only visible to you</p>
+    <button class="c-bbtn c-bbtn-c" data-go="saved"><span data-t="cl_cta">Start importing recipe</span></button>
+    <p class="c-left" data-t="cl_left">5 of 5 imports left this week</p>
+    <button class="c-unl" data-back><span class="c-pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.5 2H3.422a.4.4 0 0 0-.293.128A.4.4 0 0 0 3 2.42v19.162a.46.46 0 0 0 .047.21.3.3 0 0 0 .14.14.2.2 0 0 0 .118.057 1 1 0 0 0 .117.012h.082a.2.2 0 0 0 .082-.023l.914-.35zM6 2h12v19.022l-6-2.375-6 2.375zm7.852 4.307q.234.093.421.268.188.174.305.408.14.232.2.558.057.327.058.745 0 .606-.14 1.048a1.56 1.56 0 0 1-.423.699q-.28.255-.738.395t-1.09.14h-1.36V6.703q0-.164.06-.29a.5.5 0 0 1 .152-.199q.093-.069.328-.105.235-.034.61-.034.562 0 .96.058.399.058.657.174m2.332 3.085a2.1 2.1 0 0 1-.598.78 3.8 3.8 0 0 1-1.242.652 5 5 0 0 1-1.477.21h-1.781v3.376a.8.8 0 0 0 .035.244q.036.105.106.175a.86.86 0 0 0 .515.163h1.125v.489H8.11v-.49h.985a1 1 0 0 0 .258-.034.7.7 0 0 0 .187-.082.35.35 0 0 0 .094-.15.6.6 0 0 0 .023-.175V6.703a.9.9 0 0 0-.035-.256.25.25 0 0 0-.129-.163.7.7 0 0 0-.258-.105 2 2 0 0 0-.398-.035h-.727v-.512h4.875q.82 0 1.454.186.631.186 1.078.56.421.372.644.86.223.49.223 1.095 0 .606-.2 1.06M20.578 2q.165 0 .293.128A.4.4 0 0 1 21 2.42v19.162a.46.46 0 0 1-.047.21.3.3 0 0 1-.14.14.2.2 0 0 1-.118.057 1 1 0 0 1-.117.012h-.082a.2.2 0 0 1-.082-.023l-.914-.35V2z"/></svg></span><span data-t="cl_unl">Unlimited with premium</span></button>
+    <button class="c-later" data-go="saved"><span data-t="cl_l">Not now</span></button>
+  </div>
+</section>
+
+<!-- 9 · their Your Collection tab (from the tab bar in screenshots 2 and 4), with the saved recipe and their folders -->
+<section class="scr c-col" data-id="saved">
+  <div class="c-pad c-pad-s">
+    <div class="c-shead"><span class="c-ava">A</span><b data-t="cv_t">Your Collection</b><span class="c-bell"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/></svg></span></div>
+    <div class="c-toast"><span class="c-fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span data-t="cv_toast">Saved to Your Collection</span></div>
+    <div class="c-fold"><span class="on" data-t="cv_f0">All</span><span data-t="cv_f1">Chicken</span><span data-t="cv_f2">Desserts</span><span data-t="cv_f3">Gluten-free</span><span data-t="cv_f4">Breakfast</span></div>
+    <div class="c-cgrid">
+      <div class="c-cg">
+        <img data-show="goal:chicken" src="assets/crop/sticky-chicken.png" alt=""><img data-show="goal:soup" src="assets/site/chili.jpg" alt=""><img data-show="goal:quick" src="assets/site/cacio.jpg" alt=""><img data-show="goal:baking" src="assets/crop/basque-cake.png" alt="">
+        <b><span data-show="goal:chicken"><span data-t="rc_c1d">Korean Style Sticky Chilli Chicken</span></span><span data-show="goal:soup"><span data-t="rc_s1d">Three-bean beef chili</span></span><span data-show="goal:quick"><span data-t="rc_q1d">Cacio e pepe, no clumps</span></span><span data-show="goal:baking"><span data-t="rc_b1d">Easy Basque Burnt Cake</span></span></b><small data-t="cv_by">Alex · saved just now</small>
+      </div>
+      <div class="c-cg c-cg-e"><span class="c-cge"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12M6 12h12"/></svg></span><b data-t="cv_imp">Import a recipe</b><small data-t="cv_imps">From Instagram, TikTok or any website · 5 of 5 left this week</small></div>
+    </div>
+    <div class="c-snapc"><span class="c-sic c-cam"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 16.2s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/></svg></span><span><b data-t="cv_cs">Made it? Send a Cooksnap</b><small data-t="cv_css">A photo of how it turned out, and how it went, for the next person who cooks it.</small></span></div>
+    <div class="c-sec"><b data-t="cv_pd">Popular Dishes</b><small data-t="cv_pdu">Updated today</small></div>
+    <div class="c-row3"><figure class="c-tile"><img src="assets/site/chickensoup.jpg" alt=""><figcaption data-t="cv_d1">Chicken Soup</figcaption></figure><figure class="c-tile"><img src="assets/site/lasagna.jpg" alt=""><figcaption data-t="cv_d2">Lasagna</figcaption></figure><figure class="c-tile"><img src="assets/site/cheesecake.jpg" alt=""><figcaption data-t="cv_d3">Cheesecake</figcaption></figure></div>
+    <div class="c-plan-c"><b data-t="cv_pl">Plan this week</b><small data-t="cv_pls">Build your weekly menu in a few taps; the shopping list builds itself from your recipes.</small></div>
+  </div>
+  <nav class="c-tabs"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="m15 15 5 5"/></svg><span data-t="tb_s3">Search</span></span><span class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10.4 21h3.2c2.24 0 3.36 0 4.216-.436a4 4 0 0 0 1.748-1.748C20 17.96 20 16.84 20 14.6V9.4c0-2.24 0-3.36-.436-4.216a4 4 0 0 0-1.748-1.748C16.96 3 15.84 3 13.6 3H10c-1.864 0-2.796 0-3.53.304A4 4 0 0 0 4.303 5.47C4 6.204 4 7.136 4 9v5.6c0 2.24 0 3.36.436 4.216a4 4 0 0 0 1.748 1.748C7.04 21 8.16 21 10.4 21"/><path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 13V6H7v7l.81-.504c.613-.381.92-.572 1.248-.647.291-.066.593-.066.884 0 .328.075.635.266 1.249.647zM7 17h10"/></svg><span data-t="tb_c3">Your Collection</span></span></nav>
+</section>
+<!-- SCREENS:END -->
+
+      </div></div>
+      <div class="au-pn" id="panel" aria-live="polite"></div>
+    </div>
+    <p class="au-hint">A proposal in your design: we haven’t seen your live flow, so it starts at first launch, not at an ad. Close the paywall with ✕ for idea 5.</p>
+    <!-- shown when CONTENT.liveUrl is set: assets/qr-app.png = qr.swift "<liveUrl>?app" -->
+    <div class="au-qr" id="qrCard" hidden><img src="assets/qr-app.png" alt="QR code that opens the prototype full screen"><div><b>Try it on your phone</b><p>Scan to open the prototype full screen, the way a new user would see it.</p></div></div>
+    <div class="au-mobw" id="qrMob" hidden><a class="au-btn" href="?app">Open it full screen</a></div>
+  </div>
+</section>
+
+<!-- the paywall TODAY vs PROPOSED — built from CONTENT.compare (stills: assets/hero/<today>.png, <proposed>.png) -->
+<section class="au-sec" id="compare" hidden><div class="au-wrap" id="cmpBody"></div></section>
+
+<footer class="au-foot" id="sources">
+  <div class="au-wrap">
+    <details id="srcDetails">
+      <summary>Where the numbers come from</summary>
+      <div class="au-srcs" id="srcBody"></div>
+    </details>
+    <p class="au-fine" id="fine"></p>
+    <div class="au-cta-line">
+      <p>Every screen here can be built and A/B tested in Adapty’s Flow Builder, with no app release.</p>
+      <a class="au-btn" href="https://adapty.io/flow-paywall-builder/" target="_blank" rel="noopener">About Flow Builder</a>
+    </div>
+  </div>
+</footer>
+
+<!-- extras: video dialog (CONTENT.video), ?app bar, ?tour overlay (CONTENT.tour) -->
+<dialog class="au-vid" id="vid" aria-label="Walkthrough video">
+  <div class="au-vid-in"><video id="vidEl" controls muted playsinline preload="none"></video></div>
+  <div class="au-vid-bar"><a id="vidDl" download>Download the MP4</a><button type="button" class="au-vid-x" id="vidX">Close</button></div>
+</dialog>
+<div class="au-scrim" id="abScrim"></div>
+<div class="au-appbar" id="appbar">
+  <button type="button" class="au-ab-why" id="abWhy"><i></i><span id="abT"></span><em>Why ↑</em></button>
+  <div class="au-lsw" id="abLang" role="group" aria-label="Language"></div>
+</div>
+<div class="au-tour" aria-hidden="true">
+  <div class="au-tb"><img src="assets/brand/appstore-icon.jpg" alt="">Growth Audit <small>· Cookpad</small></div>
+  <div class="au-tby">Prepared by Adapty</div>
+  <div class="au-tcap" id="tCap"></div>
+  <div class="au-ttap" id="tTap"></div>
+  <div class="au-tprog"><i id="tProg"></i></div>
+  <div class="au-tintro" id="tIntro"></div>
+  <div class="au-tend" id="tEnd"></div>
+</div>
+
+<!-- CONTENT — all the audit's words and numbers, as data. Schema (brand-check enforces it):
+     ideas  : 3–5 rows, ranked (the audit is five ideas, never fifteen). screen = the screen that shows it.
+     panel  : one entry per screen. idea = its number in ideas (1-based) or 0 for a context screen.
+              why on an idea screen reads "<b>Try</b> X, <b>because</b> Y." in ≤ 45 words; iv = its range.
+              why on a context screen is one line saying what it sets up.
+     hero   : three screen ids shown as stills in the hero — run hero-stills.sh after the screens are done.
+     outcome: combined "up to" numbers, PS-deck style, never above the ceiling of the per-idea ranges.
+     sources: public facts only — App Store, their site, their screens. No sales research on this page.
+     EXTRAS (each one hides itself when left empty):
+     langs  : [{"code":"en","name":"English"},{"code":"es","name":"Español · Spain prices"}] — first = the markup's language
+     i18n   : {"es": {"<data-t key>": "text with {tokens}"}} — every data-t key, for every language after the first
+     prices : {"es": {"yr": "39,99 €", …}} — {tokens} in i18n strings; that storefront's real IAP prices
+     labelsI18n: {"es": {"goal": {"a": "…"}}} — C.labels per language (data-bind="label:…")
+     liveUrl: final Pages URL (QR card + video end card); the QR file encodes liveUrl + "?app"
+     video / poster: "assets/walkthrough.mp4" / "assets/walkthrough-poster.jpg" (record-video.sh)
+     compare: {today, proposed, kicker, title, sub, todayCap, rows:[{h, idea, was, now}], kept} — today = a data-aside screen
+     tour   : {segments:[{id, d, st, tap:[selector-in-screen, ms], pop, reveal, end}], captions:{id:{n|k, t, l, o, ol}},
+              introLede, endTitle} — ~30 s total; the last segment has end:true (the end card) -->
+<script type="application/json" id="content">
+{
+ "app": "Cookpad",
+ "state": {
+  "goal": "chicken"
+ },
+ "labels": {
+  "goal": {
+   "chicken": "Chicken",
+   "soup": "Soups & chili",
+   "quick": "Quick & easy",
+   "baking": "Baking & desserts",
+   "none": ""
+  }
+ },
+ "chips": {
+  "welcome": "Welcome",
+  "who": "One question",
+  "search": "First search",
+  "results": "Results",
+  "recipe": "Recipe",
+  "signup": "Sign-up",
+  "paywall": "Paywall",
+  "close": "On close",
+  "saved": "Collection"
+ },
+ "hero": [
+  "results",
+  "paywall",
+  "who"
+ ],
+ "outcome": {
+  "cr": "+15%"
+ },
+ "ideas": [
+  {
+   "screen": "who",
+   "title": "Ask what they cook, then use the answer",
+   "what": "Your listing opens with “Tell us what's in the fridge and we'll tell you what to make with it.” Ask it once, in your own photo tiles (Chicken, Soups &amp; chili, Quick &amp; easy, Baking &amp; desserts, all named on the listing). The answer fills the first search and the paywall headline.",
+   "impact": "+10–15%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "paywall",
+   "title": "Make the paywall about their search",
+   "what": "Your listing sells Premium in three lines: the most popular recipes at the top, unlimited imports, advanced filters. Show them as free vs Premium with your own limit (5 imports a week, from your screenshot), and 4.4★ from 7,335 US ratings by the button.",
+   "impact": "+10–15%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "signup",
+   "title": "Recipes first, the account at the first save",
+   "what": "US reviews keep coming back to sign-up before recipes: “can't unless I sign up, I'll just stick with Pinterest” (2015), “You have to sign up” (2020). We can't see today's first launch. If it still asks first, ask at the first save, with the recipe already on screen.",
+   "impact": "+5–10%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "results",
+   "title": "Show Premium inside the results it improves",
+   "what": "“The most popular recipes at the top of every search” can't be seen until someone pays. Add a gold Popular sort and a strip in your Top Cooksnapped banner style to the free results, and open the paywall from there. The free list stays complete.",
+   "impact": "+5–10%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "close",
+   "title": "Let ✕ lead to your import sheet, not a dead end",
+   "what": "All six US purchases are called “Premium Service”: $4.99 five times and $1.99 once, and nothing public says what the $1.99 is. So there's no second plan to offer on close. Show your own import sheet instead: “5 of 5 imports left this week · Unlimited with premium”.",
+   "impact": "+3–8%",
+   "il": "CR to purchase"
+  }
+ ],
+ "panel": {
+  "welcome": {
+   "idea": 0,
+   "t": "First launch, in your App Store style",
+   "why": "A proposal built from your screenshots: orange ground, your “Ad-Free Browsing” box and photo tiles. It asks for no account."
+  },
+  "who": {
+   "idea": 1,
+   "t": "Ask what they cook",
+   "why": "<b>Try</b> one question in your photo tiles, then reuse the answer in the first search and the paywall headline, <b>because</b> your listing promises “tell us what's in the fridge” and the answer makes every next screen theirs.",
+   "iv": "+10–15%",
+   "il": "CR to purchase",
+   "also": "Tap a tile: the search, the recipe and the paywall all follow it."
+  },
+  "search": {
+   "idea": 0,
+   "t": "Your Search, already typed",
+   "why": "Your Search screen from the App Store, with the field filled from their answer and today’s popular searches below."
+  },
+  "results": {
+   "idea": 4,
+   "t": "Premium inside the results",
+   "why": "<b>Try</b> a gold Popular sort and a Top Cooksnapped strip on the free results, opening the paywall, <b>because</b> Premium’s first benefit, the most popular recipes on top, is invisible until someone pays.",
+   "iv": "+5–10%",
+   "il": "CR to purchase",
+   "also": "The free list stays complete. Tap a recipe to keep going, or the gold strip for the paywall."
+  },
+  "recipe": {
+   "idea": 0,
+   "t": "Your recipe screen, free to read",
+   "why": "Rebuilt from App Store screenshot 2: photo, the gold Top Cooksnapped banner, the cook and the ingredients. Save it to go on."
+  },
+  "signup": {
+   "idea": 3,
+   "t": "Sign up at the first save",
+   "why": "<b>Try</b> asking for the account only when they save a recipe, in your own bottom sheet, <b>because</b> US reviews say “can't unless I sign up, I'll just stick with Pinterest” and “All I want are recipes”.",
+   "iv": "+5–10%",
+   "il": "CR to purchase",
+   "also": "Those reviews are from 2015–2020; we haven’t seen whether today’s first launch still asks."
+  },
+  "paywall": {
+   "idea": 2,
+   "t": "A paywall about their search",
+   "why": "<b>Try</b> a headline naming their pick, your three Premium lines as free vs Premium, and 4.4★ from 7,335 ratings by the button, <b>because</b> one US review reads the gate as “force you to pay a monthly subscription to see their most popular recipes”.",
+   "iv": "+10–15%",
+   "il": "CR to purchase",
+   "also": "No billing period shows: neither your listing nor the IAP list states one for $4.99. Close it with ✕ for idea 5."
+  },
+  "close": {
+   "idea": 5,
+   "t": "On close, your import sheet",
+   "why": "<b>Try</b> sending ✕ to your import sheet with “5 of 5 imports left this week · Unlimited with premium”, <b>because</b> there’s no real second plan to offer, and the import limit is the next place Premium helps.",
+   "iv": "+3–8%",
+   "il": "CR to purchase",
+   "also": "A US review asks for “a lifetime payment option”. If you add one, test it here."
+  },
+  "saved": {
+   "idea": 0,
+   "t": "Your Collection, with the first recipe",
+   "why": "Where the flow ends: the saved recipe, your theme folders and the weekly plan from your listing. Free, with no ads."
+  }
+ },
+ "langs": [
+  {
+   "code": "en",
+   "name": "English"
+  },
+  {
+   "code": "id",
+   "name": "Bahasa Indonesia · Indonesia prices"
+  }
+ ],
+ "i18n": {
+  "id": {
+   "wl_h": "Bingung masak apa malam ini?",
+   "wl_s": "Cari berdasarkan bahan atau masakan di antara ribuan resep pemasak rumahan, dibuktikan oleh yang memasaknya.",
+   "wl_ad": "Tanpa Iklan",
+   "wl_t1": "Ayam",
+   "wl_t2": "Salmon",
+   "wl_t3": "Lasagna",
+   "wl_t4": "Chili",
+   "wl_t5": "Roti Pisang",
+   "wl_q": "“you can search an ingredient and it’ll find recipes using that ingredient.”",
+   "wl_qa": "Ulasan App Store AS (dalam bahasa Inggris)",
+   "wl_cta": "Cari menu malam ini",
+   "wl_n": "Lihat-lihat dulu tanpa perlu akun.",
+   "wl_log": "Saya sudah punya akun",
+   "wh_skip": "Lewati",
+   "wh_h": "Kamu paling sering masak apa?",
+   "wh_s": "Pencarian pertamamu dimulai dari situ. Resep duluan, tanpa perlu daftar.",
+   "wh_o1": "Ayam",
+   "wh_o2": "Sup &amp; chili",
+   "wh_o3": "Cepat &amp; mudah",
+   "wh_o4": "Kue &amp; makanan penutup",
+   "wh_n": "Resep dari pemasak rumahan di AS dan seluruh dunia, diterjemahkan otomatis.",
+   "wh_cta": "Tunjukkan resepnya",
+   "sr_t": "Cari",
+   "q_chicken": "ayam",
+   "q_soup": "chili",
+   "q_quick": "pasta",
+   "q_baking": "cheesecake",
+   "sr_go": "Cari",
+   "sr_from": "Dari jawabanmu",
+   "sg_c1": "paha ayam",
+   "sg_c2": "nasi ayam",
+   "sg_c3": "gochujang",
+   "sg_s1": "kacang merah",
+   "sg_s2": "lentil",
+   "sg_s3": "sup ayam",
+   "sg_q1": "bawang putih",
+   "sg_q2": "parmesan",
+   "sg_q3": "kerang",
+   "sg_b1": "keju krim",
+   "sg_b2": "pisang",
+   "sg_b3": "air fryer",
+   "sr_pop": "Populer hari ini",
+   "sr_upd": "Diperbarui 04.04",
+   "sr_g1": "Filet Mignon",
+   "sr_g2": "Kerang Scallop",
+   "sr_g3": "Salmon",
+   "sr_g4": "Sup Ayam",
+   "sr_g5": "Lasagna",
+   "sr_g6": "Pancake",
+   "sr_g7": "Asparagus",
+   "sr_g8": "Quinoa",
+   "tb_s": "Cari",
+   "tb_c": "Koleksimu",
+   "tb_s2": "Cari",
+   "tb_c2": "Koleksimu",
+   "tb_s3": "Cari",
+   "tb_c3": "Koleksimu",
+   "q_chicken2": "ayam",
+   "q_soup2": "chili",
+   "q_quick2": "pasta",
+   "q_baking2": "cheesecake",
+   "rs_new": "Terbaru",
+   "rs_pop": "Populer",
+   "rs_cs": "Ada Cooksnap",
+   "rs_gb": "Resep paling banyak di-Cooksnap tampil duluan dengan Premium",
+   "rs_gs": "Di-Cooksnap 5+ orang · lihat yang terpopuler duluan",
+   "rs_n": "Terbaru duluan · gratis dibuka, disimpan, dan dimasak",
+   "rc_c1": "Ayam Pedas Lengket ala Korea",
+   "rc_c1i": "paha ayam, gochujang, madu, bawang putih, daun bawang",
+   "rc_c2": "Sup ayam pasta creamy",
+   "rc_c2i": "ayam, pasta, bayam, tomat kering, krim",
+   "rc_c3": "Ayam panggang parmesan",
+   "rc_c3i": "dada ayam, parmesan, mayones, bawang putih bubuk",
+   "rc_s1": "Chili daging tiga kacang",
+   "rc_s1i": "daging giling, kacang merah, kacang hitam, tomat, jintan",
+   "rc_s2": "Sup ayam komplet",
+   "rc_s2i": "ayam, kentang, cheddar, daun bawang, saus sambal",
+   "rc_s3": "Sup lentil sederhana",
+   "rc_s3i": "lentil, wortel, bawang bombai, bawang putih, kaldu",
+   "rc_q1": "Cacio e pepe, tanpa menggumpal",
+   "rc_q1i": "spageti, pecorino, lada hitam, air rebusan pasta",
+   "rc_q2": "Scallop mentega bawang 10 menit",
+   "rc_q2i": "scallop, mentega, bawang putih, lemon, asparagus",
+   "rc_q3": "Lasagna wajan praktis",
+   "rc_q3i": "lembaran lasagna, daging giling, ricotta, saus marinara",
+   "rc_b1": "Basque Burnt Cake Mudah",
+   "rc_b1i": "keju krim, gula, telur, krim, tepung",
+   "rc_b2": "Cheesecake New York",
+   "rc_b2i": "keju krim, biskuit graham, krim asam, vanila",
+   "rc_b3": "Roti pisang choco chip",
+   "rc_b3i": "pisang matang, tepung, gula palem, choco chip",
+   "rc_snap": "Di-Cooksnap 5+",
+   "rc_snap2": "Di-Cooksnap 5+",
+   "rc_snap3": "Di-Cooksnap 5+",
+   "rc_snap4": "Di-Cooksnap 5+",
+   "rp_f": "Masuk Resep Paling Banyak Di-Cooksnap",
+   "rp_fs": "Di-Cooksnap oleh 5+ orang",
+   "rc_c1b": "Ayam Pedas Lengket ala Korea",
+   "rc_s1b": "Chili daging tiga kacang",
+   "rc_q1b": "Cacio e pepe, tanpa menggumpal",
+   "rc_b1b": "Basque Burnt Cake Mudah",
+   "rc_c1c": "Ayam Pedas Lengket ala Korea",
+   "rc_s1c": "Chili daging tiga kacang",
+   "rc_q1c": "Cacio e pepe, tanpa menggumpal",
+   "rc_b1c": "Basque Burnt Cake Mudah",
+   "rc_c1d": "Ayam Pedas Lengket ala Korea",
+   "rc_s1d": "Chili daging tiga kacang",
+   "rc_q1d": "Cacio e pepe, tanpa menggumpal",
+   "rc_b1d": "Basque Burnt Cake Mudah",
+   "rp_loc": "Pemasak rumahan, AS",
+   "rp_dc": "Potongan ayam berlapis saus pedas manis. Paling pas disajikan dengan nasi.",
+   "rp_ds": "Satu panci untuk semua, malah lebih enak keesokan harinya.",
+   "rp_dq": "Tiga bahan dan air rebusan pasta. Siap dalam 15 menit.",
+   "rp_db": "Basque Burnt Cake air fryer ini lembut dan creamy. Gampang banget dibuat!",
+   "rp_ck": "Waktu masak",
+   "rp_ck1": "30 menit",
+   "rp_ck2": "1 jam",
+   "rp_ck3": "15 menit",
+   "rp_ck4": "50 menit",
+   "rp_sv": "Cooksnap",
+   "rp_ing": "Bahan-bahan",
+   "ig_c1": "paha ayam",
+   "ig_c2": "gochujang",
+   "ig_c3": "madu",
+   "ig_s1": "daging giling",
+   "ig_s2": "kacang",
+   "ig_s3": "jintan",
+   "ig_q1": "spageti",
+   "ig_q2": "pecorino",
+   "ig_q3": "lada hitam",
+   "ig_b1": "Keju krim",
+   "ig_b2": "Gula pasir",
+   "ig_b3": "telur",
+   "rp_save": "Simpan ke Koleksimu",
+   "su_by": "Alex · Di-Cooksnap oleh 5+ orang",
+   "su_t": "Simpan ke Koleksimu?",
+   "su_s": "Akun gratis menyimpan setiap resep yang kamu simpan, di ponsel dan di web.",
+   "su_a": "Lanjutkan dengan Apple",
+   "su_g": "Lanjutkan dengan Google",
+   "su_e": "Lanjutkan dengan email",
+   "su_n": "Resep yang kamu simpan tetap privat sampai kamu memilih membagikannya.",
+   "su_l": "Nanti saja, lanjut lihat-lihat",
+   "pw_rank": "Paling Banyak Di-Cooksnap",
+   "pw_pill": "Cookpad Premium",
+   "pw_hc": "Resep ayam terpopuler, paling atas di tiap pencarian",
+   "pw_hs": "Sup dan chili terpopuler, paling atas di tiap pencarian",
+   "pw_hq": "Resep cepat terpopuler, paling atas di tiap pencarian",
+   "pw_hb": "Resep kue terpopuler, paling atas di tiap pencarian",
+   "pw_free": "Gratis",
+   "pw_prem": "Premium",
+   "pw_r1": "Hasil pencarian",
+   "pw_r1f": "Terbaru duluan",
+   "pw_r1p": "Terpopuler duluan",
+   "pw_r2": "Impor resep",
+   "pw_r2f": "5 per minggu",
+   "pw_r2p": "Tanpa batas",
+   "pw_r3": "Filter",
+   "pw_r3f": "Dasar",
+   "pw_r3p": "Lanjutan",
+   "pw_rt": "{rating} · {count} rating di App Store",
+   "pw_q": "“Suka banget sama cookpad resepnya enak enak🫶🏻”",
+   "pw_pn": "Premium Service",
+   "pw_pns": "Semua di atas, di setiap pencarian",
+   "pw_pr": "{pr}",
+   "pw_cta": "Berlangganan Premium",
+   "pw_rs": "Pulihkan",
+   "pw_tm": "Ketentuan",
+   "pw_pv": "Privasi",
+   "cl_t": "Tetap masak, gratis",
+   "cl_s": "Resepmu sudah tersimpan. Bawa juga resep yang kamu temukan di tempat lain, bahan dan langkahnya sudah dipisah, siap diikuti.",
+   "cl_web": "Situs apa pun",
+   "cl_cam": "Halaman buku resep",
+   "cl_ex": "Chicken Velouté Stew",
+   "cl_q": "Impor resep ini?",
+   "cl_v": "Disimpan sebagai resep yang hanya bisa kamu lihat",
+   "cl_cta": "Mulai impor resep",
+   "cl_left": "Sisa 5 dari 5 impor minggu ini",
+   "cl_unl": "Tanpa batas dengan premium",
+   "cl_l": "Nanti saja",
+   "cv_t": "Koleksimu",
+   "cv_toast": "Tersimpan di Koleksimu",
+   "cv_f0": "Semua",
+   "cv_f1": "Ayam",
+   "cv_f2": "Penutup",
+   "cv_f3": "Bebas gluten",
+   "cv_f4": "Sarapan",
+   "cv_by": "Alex · baru saja disimpan",
+   "cv_imp": "Impor resep",
+   "cv_imps": "Dari Instagram, TikTok, atau situs apa pun · sisa 5 dari 5 minggu ini",
+   "cv_cs": "Sudah masak? Kirim Cooksnap",
+   "cv_css": "Foto hasil masakanmu dan ceritanya, untuk orang berikutnya yang memasak resep ini.",
+   "cv_pd": "Masakan Populer",
+   "cv_pdu": "Diperbarui hari ini",
+   "cv_d1": "Sup Ayam",
+   "cv_d2": "Lasagna",
+   "cv_d3": "Cheesecake",
+   "cv_pl": "Rencanakan minggu ini",
+   "cv_pls": "Susun menu mingguan dalam beberapa ketukan; daftar belanja tersusun sendiri dari resepmu."
+  }
+ },
+ "prices": {
+  "id": {
+   "pr": "Rp 39ribu",
+   "rating": "4,9",
+   "count": "31.706"
+  }
+ },
+ "labelsI18n": {
+  "id": {
+   "goal": {
+    "chicken": "Ayam",
+    "soup": "Sup & chili",
+    "quick": "Cepat & mudah",
+    "baking": "Kue & penutup",
+    "none": ""
+   }
+  }
+ },
+ "liveUrl": "https://eddieatadapty.github.io/cookpad-flow-rebuild/",
+ "video": "assets/walkthrough.mp4",
+ "poster": "assets/walkthrough-poster.jpg",
+ "compare": null,
+ "tour": {
+  "segments": [
+   {
+    "id": "welcome",
+    "d": 3200,
+    "tap": [
+     ".c-wbtn",
+     2600
+    ]
+   },
+   {
+    "id": "who",
+    "d": 1500,
+    "st": {
+     "goal": "none"
+    }
+   },
+   {
+    "id": "who",
+    "d": 1300,
+    "st": {
+     "goal": "chicken"
+    },
+    "tap": [
+     "[data-pick=\"goal:chicken\"]",
+     250
+    ]
+   },
+   {
+    "id": "search",
+    "d": 2400,
+    "tap": [
+     ".c-field",
+     1900
+    ]
+   },
+   {
+    "id": "results",
+    "d": 2800,
+    "tap": [
+     ".c-card",
+     2300
+    ]
+   },
+   {
+    "id": "recipe",
+    "d": 2400,
+    "tap": [
+     ".c-save",
+     1900
+    ]
+   },
+   {
+    "id": "signup",
+    "d": 2500,
+    "tap": [
+     ".c-bbtn",
+     2000
+    ]
+   },
+   {
+    "id": "paywall",
+    "d": 3200
+   },
+   {
+    "id": "paywall",
+    "d": 1500,
+    "tap": [
+     ".c-px",
+     1000
+    ]
+   },
+   {
+    "id": "close",
+    "d": 2800,
+    "tap": [
+     ".c-later",
+     2300
+    ]
+   },
+   {
+    "id": "saved",
+    "d": 2400
+   },
+   {
+    "id": "saved",
+    "d": 2600,
+    "end": true
+   }
+  ],
+  "captions": {
+   "welcome": {
+    "k": "Context",
+    "t": "First launch, no account",
+    "l": "Your App Store look, recipes one tap away."
+   },
+   "who": {
+    "n": 1,
+    "t": "Ask what they cook",
+    "l": "Four photo tiles, all from your listing.",
+    "o": "+10–15%",
+    "ol": "CR to purchase"
+   },
+   "search": {
+    "k": "Context",
+    "t": "The first search, typed",
+    "l": "Filled from the answer."
+   },
+   "results": {
+    "n": 4,
+    "t": "Premium inside the results",
+    "l": "A gold Popular sort; the free list stays whole.",
+    "o": "+5–10%",
+    "ol": "CR to purchase"
+   },
+   "recipe": {
+    "k": "Context",
+    "t": "Your recipe, free to read",
+    "l": "Save it to keep it."
+   },
+   "signup": {
+    "n": 3,
+    "t": "Sign up at the first save",
+    "l": "The recipe is already on screen.",
+    "o": "+5–10%",
+    "ol": "CR to purchase"
+   },
+   "paywall": {
+    "n": 2,
+    "t": "A paywall about their search",
+    "l": "Free vs Premium, 4.4★ by the button.",
+    "o": "+10–15%",
+    "ol": "CR to purchase"
+   },
+   "close": {
+    "n": 5,
+    "t": "On close, your import sheet",
+    "l": "“Unlimited with premium”, where it helps next.",
+    "o": "+3–8%",
+    "ol": "CR to purchase"
+   },
+   "saved": {
+    "k": "Context",
+    "t": "Your Collection",
+    "l": "The first recipe saved, free."
+   }
+  },
+  "introLede": "Five ideas to turn more home cooks into Premium subscribers.",
+  "endTitle": "Five ideas, built into your own app."
+ },
+ "grounding": "Impact ranges are Adapty’s expected effect from teardowns and A/B tests across 30,000+ subscription apps, not measured lift for Cookpad. They overlap, so they don’t add up.",
+ "sources": [
+  {
+   "group": "Prices",
+   "items": [
+    {
+     "dt": "$4.99 · Premium Service",
+     "dd": "The <a href=\"https://apps.apple.com/us/app/cookpad-recipe-meal-planner/id585332633\" target=\"_blank\" rel=\"noopener\">US App Store</a> In-App Purchases list for Cookpad: Recipe &amp; Meal Planner (id 585332633), read 5 Nov 2026: “Premium Service $4.99” five times and “Premium Service $1.99” once."
+    },
+    {
+     "dt": "Finding: no billing period",
+     "dd": "Neither the IAP list nor your US listing text says whether $4.99 is per week, month or year, and your listing names no plans or terms. The prototype shows $4.99 with no period. One US review calls it “a monthly subscription”; a review isn’t a source for the price, so we didn’t use it."
+    },
+    {
+     "dt": "Not used: $1.99",
+     "dd": "Nothing public explains the $1.99 “Premium Service”, so it isn’t offered on close, and we don’t treat it as a discount."
+    },
+    {
+     "dt": "Indonesia: Rp 39ribu",
+     "dd": "The <a href=\"https://apps.apple.com/id/app/cookpad-recipe-book-meals/id585332633\" target=\"_blank\" rel=\"noopener\">Indonesian App Store</a> In-App Purchases list, read by hand on 5 Nov 2026: “Premium Service” at Rp 40ribu once, Rp 39ribu four times and Rp 29ribu once. The Indonesian screens use Rp 39ribu, the most common price, written the way the listing writes it. Rp 40ribu and Rp 29ribu aren’t used."
+    }
+   ]
+  },
+  {
+   "group": "Proof",
+   "items": [
+    {
+     "dt": "4.4★ · 7,335 ratings",
+     "dd": "The <a href=\"https://apps.apple.com/us/app/cookpad-recipe-meal-planner/id585332633\" target=\"_blank\" rel=\"noopener\">US App Store listing</a>, read 5 Nov 2026. Indonesia: 4.9★ from 31,706 ratings, used on the Indonesian paywall."
+    },
+    {
+     "dt": "“There’s almost no recipe you CAN’T find on Cookpad.”",
+     "dd": "A 5★ US App Store review by Sherry: Leftover Chronicles, 13 Mar 2026 (<a href=\"https://itunes.apple.com/us/rss/customerreviews/id=585332633/sortby=mostrecent/json\" target=\"_blank\" rel=\"noopener\">Apple’s review feed</a>). The Indonesian paywall uses “Suka banget sama cookpad resepnya enak enak🫶🏻”, a 5★ US App Store review by Rahmaul29 of 28 Mar 2025, written in Indonesian."
+    },
+    {
+     "dt": "“you can search an ingredient and it’ll find recipes using that ingredient.”",
+     "dd": "A 5★ US App Store review by Joannnneeeee, 2 May 2025, on the welcome screen. The Indonesian welcome keeps it in English and says so."
+    },
+    {
+     "dt": "“force you to pay a monthly subscription to see their most popular recipes”",
+     "dd": "A 2★ US App Store review by Benni553, 29 Jan 2026 (Pacific time). It shapes ideas 2 and 4; it isn’t on a screen."
+    },
+    {
+     "dt": "“It wasn’t subscription. Need a lifetime payment option”",
+     "dd": "A 3★ US App Store review by Peps¡Cola, 6 Jun 2024. It shapes the note on idea 5."
+    },
+    {
+     "dt": "Sign-up reviews",
+     "dd": "1★ US App Store reviews: “just want to use it to search (like it advertises) for for recipes from ingredients I have, but can't unless I sign up, I'll just stick with Pinterest thank u.” (wncapt2007, 17 Apr 2015), “All I want are recipes, I shouldn't need to sign up!” (Anaima, 22 Dec 2016), “You have to sign up” (Madyalmady, 15 May 2020). They are old; we can’t see whether today’s first launch still asks."
+    },
+    {
+     "dt": "Free filters",
+     "dd": "“do wish the free version let you search w more filters”: a 5★ US App Store review by plantcatcrisis, 4 Jul 2026. It backs the Filters row on the paywall."
+    }
+   ]
+  },
+  {
+   "group": "Features and copy",
+   "items": [
+    {
+     "dt": "Premium lines",
+     "dd": "Your US listing: “The most popular recipes at the top of every search.”, “Import unlimited recipes.”, “Advanced filters to match every recipe to your preferences.” Your site’s Premium card says “Find the most popular recipes on the top of your search results.” and “Subscribe to Premium for exclusive features &amp; benefits!”, the CTA we used."
+    },
+    {
+     "dt": "Import limit",
+     "dd": "“5 of 5 imports left this week”, “Unlimited with premium”, “Import this recipe?”, “Saved as a recipe only visible to you” and “Start importing recipe” are word for word from your App Store screenshot 3."
+    },
+    {
+     "dt": "Other listing claims used",
+     "dd": "“Not sure what to cook tonight?”, search by ingredient or by dish, Cooksnaps, import from Instagram, TikTok, any website or a cookbook page, automatic translation, “No ads, not even in the free version”, private theme folders, the weekly menu and shopping list, and the dish types on the question tiles. “Ad-Free Browsing” and “Featured in the Top Cooksnapped Recipes · Cooksnapped by 5+ people” are from App Store screenshots 1 and 2."
+    },
+    {
+     "dt": "A proposal, not your live flow",
+     "dd": "We have no recording of your app, so every screen here is a proposal in your design, built from your App Store screenshots, your listing and cookpad.com/us. Recipe titles, ingredients, cook times and the cook names Alex, Sam and Jo are examples, except Korean Style Sticky Chilli Chicken and Easy Basque Burnt Cake, which are on your screenshots."
+    },
+    {
+     "dt": "Our copy",
+     "dd": "The question and its subline, the search suggestions, the gold results strip, the sign-up sheet, the paywall headline and table, “Keep cooking, free” and all the Indonesian are ours, written in your voice."
+    }
+   ]
+  },
+  {
+   "group": "Design",
+   "items": [
+    {
+     "dt": "Colours",
+     "dd": "From cookpad.com/us CSS tokens and sampled off your US App Store screenshots: #ff9933 orange, #f47e2e dark orange, #e9b83f premium gold, #cb9a17 gold text, #fff3d8 premium background, #f8f6f2 canvas, #f6f5f1 sheet, #fbfbf9 cards, #0f0f0f buttons, #767676 secondary text."
+    },
+    {
+     "dt": "Type",
+     "dd": "Your site is set in noto-sans from Adobe Fonts (Typekit); the prototype uses Noto Sans from Google Fonts, the same family."
+    },
+    {
+     "dt": "Images",
+     "dd": "Recipe photos from the home page of cookpad.com/us and cut from your US App Store screenshots 2, 3 and 5 (screenshot 2 straightened). Logo and icons from cookpad.com/us. Nothing is stock. The Apple, Google, mail, TikTok and camera glyphs are redrawn."
+    }
+   ]
+  },
+  {
+   "group": "What we couldn’t see",
+   "items": [
+    {
+     "dt": "Your live flow and paywall",
+     "dd": "Your app isn’t in any recording we can reach, so we haven’t seen today’s first launch, sign-up or paywall, and there is no today vs proposed comparison."
+    },
+    {
+     "dt": "Ads",
+     "dd": "We found no ads for the app: none in the Meta Ad Library and no Apple Ads, so the prototype starts at first launch, not at an ad."
+    },
+    {
+     "dt": "Billing period, trial and the $1.99",
+     "dd": "Not stated anywhere public. The prototype claims no period, no trial and no discount."
+    },
+    {
+     "dt": "Which filters are Premium",
+     "dd": "Your listing names “advanced filters” for Premium without saying which ones, so the table says Basic vs Advanced."
+    },
+    {
+     "dt": "Your test history",
+     "dd": "We can’t see what you’ve already tested."
+    }
+   ]
+  }
+ ]
+}
+</script>
+
+<script>
+/* per-app hooks go here: window.onSync = function(S){…}; window.onEnter = function(id, S){…}; window.onLang = function(lang){…};
+   Globals available: S (S.lang = current language), C, cur, ORDER, scr, go(), back(), jump(), sync(), setLang(), fillP(str, lang),
+   SHOT (screenshot/tour run), HERO (hero-still run). Per-language dynamic text: read S.lang in onSync. */
+/* Cookpad hooks: a white status bar over the orange welcome and the full-bleed photos. */
+var LITE = {welcome: 1, recipe: 1, signup: 1, paywall: 1, close: 1};
+window.onSync = function(S){
+  var sb = document.querySelector('.sbar'); if (sb) sb.classList.toggle('lite', !!LITE[cur]);
+};
+</script>
+<script>
+/* ============ engine — generic, do not fork per app ============ */
+var C = JSON.parse(document.getElementById('content').textContent);
+var S = C.state, scr = {}, ORDER = [], hist = [], cur = null, Q = location.search;
+var SHOT = /[?&](shot|phone|tour)\b/.test(Q), HERO = /[?&]hero\b/.test(Q);
+/* a screen with data-aside (e.g. the paywall TODAY for the side-by-side) renders for stills but is not part of the flow */
+document.querySelectorAll('.scr').forEach(function(s){ scr[s.dataset.id] = s; if (!s.hasAttribute('data-aside')) ORDER.push(s.dataset.id); });
+if (/[?&]shot\b/.test(Q)) document.documentElement.classList.add('shot');
+if (/[?&]phone\b/.test(Q)) document.documentElement.classList.add('shot', 'phoneonly');
+if (/[?&]clear\b/.test(Q)) document.documentElement.classList.add('clear');
+var IDEAS = (C.ideas || []).length;
+
+/* ---- languages: markup is the first language; C.i18n[lang][data-t key] the others; {tokens} from C.prices[lang] ---- */
+var LANGS = C.langs || [], BASE = LANGS.length ? LANGS[0].code : 'en', LANG_DONE = BASE, BASE_LABELS = JSON.parse(JSON.stringify(C.labels || {}));
+if (!S.lang) S.lang = BASE;
+function fillP(s, l){ var P = (C.prices || {})[l] || {}; return String(s).replace(/\{(\w+)\}/g, function(m, k){ return k in P ? P[k] : m; }); }
+function applyLang(){
+  var l = S.lang || BASE; if (l === LANG_DONE) return;
+  var T = (C.i18n || {})[l] || {};
+  document.querySelectorAll('.phone [data-t]').forEach(function(el){
+    if (el._base == null) el._base = el.innerHTML;
+    el.innerHTML = l === BASE || T[el.dataset.t] == null ? el._base : fillP(T[el.dataset.t], l);
+  });
+  C.labels = JSON.parse(JSON.stringify(BASE_LABELS));
+  var LL = (C.labelsI18n || {})[l] || {}; Object.keys(LL).forEach(function(k){ C.labels[k] = LL[k]; });
+  LANG_DONE = l;
+}
+function setLang(l){
+  if (!LANGS.some(function(x){ return x.code === l; })) return;
+  S.lang = l; sync();
+  document.querySelectorAll('[data-setlang]').forEach(function(b){ b.classList.toggle('on', b.dataset.setlang === l); });
+  if (window.onLang) window.onLang(l);
+}
+
+function lab(key){ var v = S[key]; var L = C.labels[key]; if (Array.isArray(v)) return v.map(function(x){ return L && L[x] || x; }).join(', '); return (L && L[v]) || v; }
+function sync(){
+  applyLang();
+  document.querySelectorAll('[data-bind]').forEach(function(el){
+    var b = el.dataset.bind, m = b.split(':');
+    el.textContent = m[0] === 'label' ? lab(m[1]) : m[0] === 'count' ? (S[m[1]] || []).length : (S[b] == null ? '' : S[b]);
+  });
+  document.querySelectorAll('[data-pick]').forEach(function(el){ var p = el.dataset.pick.split(':'); el.classList.toggle('on', S[p[0]] === p[1]); });
+  document.querySelectorAll('[data-toggle]').forEach(function(el){ var p = el.dataset.toggle.split(':'); el.classList.toggle('on', (S[p[0]] || []).indexOf(p[1]) > -1); });
+  document.querySelectorAll('[data-requires]').forEach(function(el){ el.disabled = !(S[el.dataset.requires] || []).length; });
+  document.querySelectorAll('[data-show]').forEach(function(el){ var p = el.dataset.show.split(':'); el.style.display = String(S[p[0]]) === p[1] ? '' : 'none'; });
+  if (window.onSync) window.onSync(S);
+}
+function show(id, dir){
+  var from = scr[cur], to = scr[id]; if (!to || id === cur) return;
+  var sheet = to.classList.contains('sheet');
+  if (from){
+    from.classList.remove('is-active');
+    if (sheet) from.classList.add('under');                                   /* a sheet slides up over the screen that opened it */
+    else if (dir === 'fwd' && !from.classList.contains('sheet')) from.classList.add('is-past');
+  }
+  if (!sheet) Object.keys(scr).forEach(function(k){ var u = scr[k]; if (u !== to && u.classList.contains('under')) { u.classList.remove('under'); if (dir === 'fwd') u.classList.add('is-past'); } });
+  to.classList.remove('is-past', 'under'); to.classList.add('is-active'); cur = id;
+  paint(); if (window.onEnter) window.onEnter(id, S);
+}
+function go(id){ if (cur) hist.push(cur); show(id, 'fwd'); }
+function back(){ if (hist.length) { var p = hist.pop(); scr[cur].classList.remove('is-active'); show(p, 'back'); } }
+function jump(id){
+  Object.keys(scr).forEach(function(k){ scr[k].classList.add('nofx'); scr[k].classList.remove('is-active', 'is-past', 'under'); });
+  var i = ORDER.indexOf(id); hist = ORDER.slice(0, i < 0 ? 0 : i); cur = null;
+  ORDER.slice(0, i).forEach(function(k){ if (!scr[k].classList.contains('sheet')) scr[k].classList.add('is-past'); });
+  if (scr[id] && scr[id].classList.contains('sheet')) {                        /* jumping to a sheet: its opener stays visible under it */
+    for (var j = i - 1; j >= 0; j--) if (!scr[ORDER[j]].classList.contains('sheet')) { scr[ORDER[j]].classList.remove('is-past'); scr[ORDER[j]].classList.add('under'); break; }
+  }
+  show(id, 'jump');
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ Object.keys(scr).forEach(function(k){ scr[k].classList.remove('nofx'); }); }); });
+}
+function stepBy(d){ var i = ORDER.indexOf(cur) + d; if (i >= 0 && i < ORDER.length) jump(ORDER[i]); }
+function jumpTo(id){
+  var p = document.getElementById('prototype');
+  if (p && !document.documentElement.classList.contains('appmode')) p.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+  jump(id);
+}
+function paint(){
+  sync();
+  var c = document.getElementById('chips');
+  if (!c.childElementCount) ORDER.forEach(function(id){
+    var p = C.panel[id] || {}, b = document.createElement('button');
+    b.className = 'au-chip'; b.type = 'button'; b.dataset.id = id; b.setAttribute('role', 'tab');
+    b.innerHTML = (p.idea ? '<i>' + p.idea + '</i>' : '') + ((C.chips && C.chips[id]) || id);
+    b.onclick = function(){ jump(id); };
+    c.appendChild(b);
+  });
+  c.querySelectorAll('.au-chip').forEach(function(b){ var on = b.dataset.id === cur; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  var d = C.panel[cur] || {t: cur, why: ''}, n = ORDER.indexOf(cur) + 1;
+  document.getElementById('panel').innerHTML =
+    (d.idea ? '<div class="au-pn-k"><i></i>Idea ' + d.idea + ' of ' + IDEAS + '</div>' : '<div class="au-pn-k au-ctx"><i></i>Context</div>') +
+    '<h3 class="au-pn-t">' + d.t + '</h3><p class="au-pn-h">' + d.why + '</p>' +
+    (d.iv ? '<div class="au-pn-o"><div class="au-lab">Potential outcome · based on Adapty data</div><div class="au-val"><mark>' + d.iv + '</mark></div><div class="au-sub">' + (d.il || '') + '</div></div>' : '') +
+    (d.also ? '<p class="au-pn-a">' + d.also + '</p>' : '') +
+    '<div class="au-pn-nav"><button type="button" onclick="stepBy(-1)"' + (n <= 1 ? ' disabled' : '') + '>‹ Previous</button><span>Screen ' + n + ' of ' + ORDER.length + '</span><button type="button" onclick="stepBy(1)"' + (n === ORDER.length ? ' disabled' : '') + '>Next ›</button></div>';
+  var ab = document.getElementById('abT'); if (ab) ab.textContent = (d.idea ? 'Idea ' + d.idea + ' of ' + IDEAS + ' · ' : '') + (d.t || '');
+}
+document.addEventListener('click', function(e){
+  var j = e.target.closest('[data-jumpto]'); if (j){ e.preventDefault(); jumpTo(j.dataset.jumpto); return; }
+  var L = e.target.closest('[data-setlang]'); if (L){ setLang(L.dataset.setlang); return; }
+  if (e.target.closest('[data-langtoggle]') && LANGS.length > 1){ var k = LANGS.findIndex(function(x){ return x.code === S.lang; }); setLang(LANGS[(k + 1) % LANGS.length].code); return; }
+  var el = e.target.closest('[data-go],[data-back],[data-pick],[data-toggle]'); if (!el) return;
+  if (el.dataset.pick){ var p = el.dataset.pick.split(':'); S[p[0]] = p[1]; sync(); if (el.dataset.advance) setTimeout(function(){ go(el.dataset.advance); }, 170); return; }
+  if (el.dataset.toggle){ var q = el.dataset.toggle.split(':'), a = S[q[0]] = S[q[0]] || [], i = a.indexOf(q[1]); if (i > -1) a.splice(i, 1); else a.push(q[1]); sync(); return; }
+  if ('back' in el.dataset) return back();
+  go(el.dataset.go);
+});
+document.querySelectorAll('[data-input]').forEach(function(inp){
+  inp.value = S[inp.dataset.input] || ''; inp.addEventListener('input', function(){ S[inp.dataset.input] = inp.value.trim() || 'there'; sync(); });
+});
+function $(id){ return document.getElementById(id); }
+
+/* hero stills, shortlist, outcome, sources — from CONTENT */
+$('heroPhones').innerHTML = (C.hero || []).map(function(id, i){
+  var pos = ['l', 'c', 'r'][i] || 'r', t = (C.chips && C.chips[id]) || id;
+  return '<button class="au-hp au-' + pos + '" data-jumpto="' + id + '" aria-label="Open ' + t + '"><img src="assets/hero/' + id + '.png" alt=""></button>';
+}).join('');
+$('ideaList').innerHTML = (C.ideas || []).map(function(r, i){
+  return '<article class="au-idea"><div class="au-num">0' + (i + 1) + '</div><div><h3>' + r.title + '</h3><p>' + r.what + '</p>' +
+    '<button type="button" class="au-lnk" data-jumpto="' + r.screen + '">See it on the screen</button></div>' +
+    '<div class="au-imp"><div class="au-v"><mark>' + r.impact + '</mark></div><div class="au-l">' + r.il + '</div></div></article>';
+}).join('');
+var O = C.outcome || {};
+$('bandNums').innerHTML =
+  (O.cr ? '<div><small>up to</small><b>' + O.cr + '</b><span>CR to purchase</span></div>' : '') +
+  (O.arpu ? '<div><small>up to</small><b>' + O.arpu + '</b><span>ARPU</span></div>' : '');
+$('bandFn').textContent = C.grounding;
+$('fine').textContent = C.grounding + ' Prepared by Adapty.';
+$('srcBody').innerHTML = C.sources.map(function(g){
+  return '<div><h4>' + g.group + '</h4><dl>' + g.items.map(function(it){ return '<dt>' + it.dt + '</dt><dd>' + it.dd + '</dd>'; }).join('') + '</dl></div>';
+}).join('');
+function openSrc(){ var d = $('srcDetails'); d.open = true; d.scrollIntoView({block: 'start'}); }
+
+/* ---- extras: language control, the paywall side by side, QR / phone view, the video ---- */
+if (LANGS.length > 1) {
+  $('langRow').hidden = false;
+  var lb = LANGS.map(function(x){ return '<button type="button" data-setlang="' + x.code + '">' + x.name + '</button>'; }).join('');
+  $('langSw').innerHTML = lb;
+  $('abLang').innerHTML = LANGS.map(function(x){ return '<button type="button" data-setlang="' + x.code + '">' + x.code.toUpperCase() + '</button>'; }).join('');
+}
+var CM = C.compare;
+if (CM && scr[CM.today] && scr[CM.proposed]) {
+  $('compare').hidden = false; $('navCompare').hidden = false;
+  $('cmpBody').innerHTML = '<div class="au-ideas-h"><p class="au-kicker">' + (CM.kicker || 'The paywall, side by side') + '</p><h2 class="au-h2">' + (CM.title || 'Today and proposed.') + (CM.sub ? ' <span>' + CM.sub + '</span>' : '') + '</h2></div>' +
+    '<div class="au-cmp"><figure><img src="assets/hero/' + CM.today + '.png" alt="Your paywall today"><figcaption>Today <span>· ' + (CM.todayCap || 'rebuilt from your recording') + '</span></figcaption></figure>' +
+    '<ol class="au-chg">' + (CM.rows || []).map(function(r){
+      return '<li><h4>' + r.h + (r.idea ? ' <i>Idea ' + r.idea + '</i>' : '') + '</h4><span class="au-was"><em>Today</em>' + r.was + '</span><span class="au-now"><em>Proposed</em>' + r.now + '</span></li>';
+    }).join('') + '</ol>' +
+    '<figure><button type="button" class="au-cmp-go" data-jumpto="' + CM.proposed + '" aria-label="Open the proposed paywall"><img src="assets/hero/' + CM.proposed + '.png" alt="The proposed paywall"></button><figcaption>Proposed <span>· tap to try it</span></figcaption></figure></div>' +
+    (CM.kept ? '<p class="au-kept">' + CM.kept + '</p>' : '');
+}
+if (C.liveUrl) { $('qrCard').hidden = false; $('qrMob').hidden = false; }
+if (/[?&]app\b/.test(Q)) {
+  var H0 = document.documentElement; H0.classList.add('appmode');
+  var openP = function(o){ H0.classList.toggle('au-open', o); $('abWhy').querySelector('em').textContent = o ? 'Close ↓' : 'Why ↑'; };
+  $('abWhy').onclick = function(){ openP(!H0.classList.contains('au-open')); };
+  $('abScrim').onclick = function(){ openP(false); };
+}
+if (C.video) {
+  var dlg = $('vid'), vel = $('vidEl'); vel.src = C.video; if (C.poster) vel.poster = C.poster; $('vidDl').href = C.video;
+  $('heroVideo').hidden = false;
+  $('heroVideo').onclick = function(){ dlg.showModal(); vel.play().catch(function(){}); };
+  $('vidX').onclick = function(){ dlg.close(); };
+  dlg.addEventListener('close', function(){ vel.pause(); });
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+}
+
+/* ---- ?tour: a deterministic walkthrough from C.tour — tourAt(ms) paints one frame; record-video.sh records it ---- */
+function tourInit(){
+  var T = C.tour, H = document.documentElement, TR = T.transition || 360;
+  H.classList.add('tourmode', 'shot'); document.body.classList.add('nofx');
+  var SEG = T.segments, START = [], STATE = [], UNDER = [], acc = 0, st = JSON.parse(JSON.stringify(C.state));
+  SEG.forEach(function(s, i){
+    START.push(acc); acc += s.d;
+    Object.keys(s.st || {}).forEach(function(k){ st[k] = s.st[k]; }); STATE.push(JSON.parse(JSON.stringify(st)));
+    var u = null; if (scr[s.id].classList.contains('sheet')) for (var j = i - 1; j >= 0; j--) if (!scr[SEG[j].id].classList.contains('sheet')) { u = SEG[j].id; break; }
+    UNDER.push(u);
+  });
+  var TOTAL = acc, capEl = $('tCap'), tap = $('tTap'), pressed = null, popped = [];
+  $('tIntro').innerHTML = '<p class="au-eyebrow"><i></i>' + document.querySelector('.au-top-hero .au-eyebrow').textContent + '</p><h1 class="au-display">' + C.app + '</h1>' +
+    '<p class="au-lede">' + (T.introLede || document.querySelector('.au-top-hero .au-lede').innerHTML) + '</p>';
+  $('tEnd').innerHTML = '<p class="au-eyebrow"><i></i>Growth Audit · ' + C.app + '</p><h2 class="au-te-h">' + (T.endTitle || 'Five ideas, built into your own onboarding.') + '</h2>' +
+    '<div class="au-te-n">' + (O.cr ? '<div><small>up to</small><b>' + O.cr + '</b><span>CR to purchase</span></div>' : '') + (O.arpu ? '<div><small>up to</small><b>' + O.arpu + '</b><span>ARPU</span></div>' : '') + '</div>' +
+    (C.liveUrl ? '<div class="au-te-q"><img src="assets/qr-app.png" alt=""><div><b>Try it on your phone</b><span>' + C.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') + '</span></div></div>' : '') +
+    '<p class="au-te-f">' + C.grounding + '</p>';
+  function ease(x){ return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function easeBack(x){ var c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }
+  function capHTML(c){
+    c = c || {k: '', t: '', l: ''};
+    return '<div class="au-tk' + (c.n ? '' : ' au-ctx') + '"><i></i>' + (c.n ? 'Idea ' + c.n + ' of ' + IDEAS : (c.k || 'Context')) + '</div><h2 class="au-tt">' + c.t + '</h2><p class="au-tl">' + (c.l || '') + '</p>' +
+      (c.o ? '<div class="au-to"><small>Potential outcome · based on Adapty data</small><b><mark>' + c.o + '</mark></b><span>' + (c.ol || '') + '</span></div>' : '');
+  }
+  function place(id, tf, z){ scr[id].style.transform = tf; scr[id].style.zIndex = z; }
+  window.TOUR_MS = TOTAL;
+  window.tourAt = function(ms){
+    ms = Math.max(0, Math.min(TOTAL - 1, ms));
+    var i = 0; while (i < SEG.length - 1 && ms >= START[i + 1]) i++;
+    var s = SEG[i], local = ms - START[i], prev = i > 0 ? SEG[i - 1] : null;
+    Object.keys(STATE[i]).forEach(function(k){ S[k] = STATE[i][k]; }); sync();
+    var moving = prev && prev.id !== s.id && local < TR, p = moving ? ease(local / TR) : 1;
+    Object.keys(scr).forEach(function(k){ scr[k].classList.remove('is-active', 'is-past', 'under'); place(k, 'translateX(100%)', 0); });
+    var B = scr[s.id];
+    if (moving) {
+      if (B.classList.contains('sheet')) { place(prev.id, 'none', 1); B.style.transform = 'translateY(' + (1 - p) * 100 + '%)'; }
+      else {
+        var slide = 'translateX(' + (-28 * p) + '%)'; place(prev.id, slide, 1); B.style.transform = 'translateX(' + (1 - p) * 100 + '%)';
+        if (UNDER[i - 1]) place(UNDER[i - 1], slide, 0);
+      }
+    } else B.style.transform = 'none';
+    B.style.zIndex = 2;
+    if (UNDER[i] && !moving) place(UNDER[i], 'none', 1);
+    /* optional reveal: s.pop scales an element in, s.reveal fades one in a beat later */
+    popped.forEach(function(e){ e.style.transform = ''; e.style.opacity = ''; }); popped = [];
+    var q = Math.max(0, Math.min(1, (local - 250) / 550));
+    if (s.pop) { var pe = B.querySelector(s.pop); if (pe) { pe.style.transform = 'scale(' + (.55 + .45 * easeBack(q)) + ')'; pe.style.opacity = Math.min(1, q * 1.6); popped.push(pe); } }
+    if (s.reveal) { var re = B.querySelector(s.reveal); if (re) { re.style.opacity = Math.max(0, Math.min(1, (local - 520) / 300)); popped.push(re); } }
+    /* caption crossfades at screen changes; waits for the intro, gives way to the end card */
+    var key = s.id, op = 1;
+    if (moving) { if (p < .5) { key = prev.id; op = 1 - p * 2; } else op = p * 2 - 1; }
+    if (capEl.dataset.k !== key) { capEl.innerHTML = capHTML(T.captions[key]); capEl.dataset.k = key; }
+    var io = ms < 1100 ? 1 : Math.max(0, 1 - (ms - 1100) / 300), eo = s.end ? Math.min(1, local / 350) : 0;
+    capEl.style.opacity = op * Math.max(0, Math.min(1, (ms - 1400) / 300)) * (1 - eo);
+    /* the finger: fades in, taps, ripples out. Selectors are scoped to the screen */
+    tap.style.opacity = 0; if (pressed) { pressed.style.opacity = ''; pressed = null; }
+    if (s.tap) {
+      var el = B.querySelector(s.tap[0]), dt = local - s.tap[1];
+      if (el && dt > -260 && dt < 420) {
+        var r = el.getBoundingClientRect();
+        tap.style.left = (r.left + r.width / 2) + 'px'; tap.style.top = (r.top + r.height / 2) + 'px';
+        if (dt < 0) { tap.style.opacity = (dt + 260) / 260 * .9; tap.style.transform = 'scale(1)'; }
+        else { tap.style.opacity = .9 * (1 - dt / 420); tap.style.transform = 'scale(' + (1 + dt / 420 * .9) + ')'; }
+        if (dt >= 0 && dt < 160) { el.style.opacity = .72; pressed = el; }
+      }
+    }
+    $('tIntro').style.opacity = T.intro === false ? 0 : io;
+    $('tEnd').style.opacity = eo;
+    $('tProg').style.width = (ms / TOTAL * 100) + '%';
+    cur = s.id;
+    return i;
+  };
+  var tm = /[?&]t=(\d+)/.exec(Q); tourAt(tm ? +tm[1] : 0);
+}
+
+/* boot: #<screen-id> deep-links a screen (shoot.sh / hero-stills.sh use it); ?lang=xx picks the language */
+(function(){
+  var lm = /[?&]lang=(\w+)/.exec(Q); if (lm) setLang(lm[1]); else setLang(S.lang);
+  var h = location.hash.slice(1);
+  jump(scr[h] ? h : ORDER[0]);
+  if (scr[h] && !SHOT && !document.documentElement.classList.contains('appmode')) setTimeout(function(){ $('prototype').scrollIntoView(); }, 0);
+  if (/[?&]tour\b/.test(Q) && C.tour) tourInit();
+})();
+</script>
+</body>
+</html>
